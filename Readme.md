@@ -61,28 +61,28 @@ Player:
   - id (socketId?)
   - score:  assoziativ array ? 
   
-  > setScore()
-  > getScore()
-  > calcBonus()
-  > calcTotal()
+    - setScore()
+    - getScore()
+    - calcBonus()
+    - calcTotal()
 
 Game:
   - players : Array
   - dice: Array 
   - playerNow: Index in players
   
-  > saveScore(scoreID)
-  > getAllPlayerScore() Array 2D
-  > addPlayer(player)
-  > rollDice()
-  > nextPlayer()
-  > reset ()
-  (> winner())
+    - saveScore(scoreID)
+    - getAllPlayerScore() Array 2D
+    - addPlayer(player)
+    - rollDice()
+    - nextPlayer()
+    - reset ()
+    - (winner())
   Prüfmethoden...
  Dice:
   - value
   
-  > roll()
+    - roll()
   
   
 ## Dokumentation
