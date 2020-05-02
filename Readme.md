@@ -62,9 +62,9 @@ Player:
   - score:  assoziativ array ? 
   
     - setScore(scoreId, score)
-    - getScore(scoreId) return score
-    - calcBonus()
-    - calcTotal()
+    - getScore(scoreId): return score
+    - calcBonus(): return bonus
+    - calcTotal(): return totalScore
 
 Game:
   - players : Array
