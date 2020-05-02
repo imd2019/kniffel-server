@@ -61,8 +61,8 @@ Player:
   - id (socketId?)
   - score:  assoziativ array ? 
   
-    - setScore()
-    - getScore()
+    - setScore(scoreId, score)
+    - getScore(scoreId) return score
     - calcBonus()
     - calcTotal()
 
@@ -71,10 +71,10 @@ Game:
   - dice: Array 
   - playerNow: Index in players
   
-    - saveScore(scoreID)
-    - getAllPlayerScore() Array 2D
-    - addPlayer(player)
-    - rollDice()
+    - saveScore(scoreID): return true/false
+    - getAllPlayerScore(): return Array 2D
+    - addPlayer(player) 
+    - rollDice() Da müssen wir schauen wie wir das mit gesperrten Würfeln machen!
     - nextPlayer()
     - reset ()
     - (winner())
