@@ -50,5 +50,39 @@
 ## Structure
 
 ### Classes
+Server: 
+  games: Array
+  password: const 
+  SOCKET_LIST: Objekt: socketId, socket
+  
+  
+Player: 
+  - name : String
+  - id (socketId?)
+  - score:  assoziativ array ? 
+  
+  > setScore()
+  > getScore()
+  > calcBonus()
+  > calcTotal()
 
+Game:
+  - players : Array
+  - dice: Array 
+  - playerNow: Index in players
+  
+  > saveScore(scoreID)
+  > getAllPlayerScore() Array 2D
+  > addPlayer(player)
+  > rollDice()
+  > nextPlayer()
+  > reset ()
+  (> winner())
+  Prüfmethoden...
+ Dice:
+  - value
+  
+  > roll()
+  
+  
 ## Dokumentation
