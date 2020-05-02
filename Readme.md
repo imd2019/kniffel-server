@@ -25,12 +25,15 @@
 #### lobby
 
 - games overview
+-
 
 #### games
 
+- create room in socket.io
+  - Name vergeben?
 - determine random start player
 - calculate results
-- identify winner
+- identify winner (notwendig?)
 
 #### general
 
@@ -43,5 +46,9 @@
 - Handler
   - für Datenversand (z.B. `server.rollDice()`)
   - für Datenempfang (z.B. `server.diceRolled()`)
+
+## Structure
+
+### Classes
 
 ## Dokumentation
