@@ -41,12 +41,16 @@ function newConnection(socket) {
     socket.disconnect();
   }
 
-  socket.on("createGame", (gameInfos) => {
-    createGame(gameInfos, socket);
+  socket.on("createGame", (gameInfos, callback) => {
+    callback(createGame(gameInfos, socket));
   });
 
-  socket.on("joinGame", (gameName) => {
-    joinGame(gameName, socket);
+  socket.on("joinGame", (gameName, callback) => {
+    callback(joinGame(gameName, socket));
+  });
+
+  socket.on("roll", (lockedDice) => {
+    roll(lockedDice, socket.id);
   });
 
   socket.on("disconnect", () => {
@@ -62,26 +66,34 @@ function createGame(gameInfos, socket) {
   if (!gameExists(gameInfos.name)) {
     socket.join(gameInfos.name, function () {
       console.log(
-        "Player " + socket.id + " created Room " + gameInfos.name + "."
+        "Player " + socket.id + " created room " + gameInfos.name + "."
       );
     });
     let game = new Game(gameInfos.name, gameInfos.size);
     game.join(socket.id);
     games[game.name] = game;
     //console.log(games);
-  } else {
-    console.log("Game exists already"); // EVTL noch zu einem Event für die Clientseite hinzufügen
+    return game.name;
   }
+  console.log("Game exists already."); // EVTL noch zu einem Event für die Clientseite hinzufügen
+  return false;
 }
 
 function joinGame(gameName, socket) {
   if (gameExists(gameName)) {
+    if (games[gameName].getPlayerIndex(socket.id) >= 0) {
+      console.log("Player is already in this game.");
+      return false;
+    }
     let game = games[gameName];
     socket.join(gameName, function () {
-      console.log("Player " + socket.id + " joined Room " + gameName + ".");
+      console.log("Player " + socket.id + " joined room " + gameName + ".");
     });
     game.join(socket.id);
+    return gameName;
   }
+  console.log("Player " + socket.id + " tried to join non-existent game.");
+  return false;
 }
 
 function gameExists(name) {
@@ -93,4 +105,12 @@ function getGameBySocketId(socketId) {
     if (games[index].getPlayerIndex(socketId) >= 0) return games[index];
   }
   return false;
+}
+
+function roll(lockedDice, socketId) {
+  let game = getGameBySocketId(socketId);
+  game.lockDice(lockedDice);
+
+  let values = game.rollDice();
+  io.to(game.name).emit("diceRolled", values);
 }
