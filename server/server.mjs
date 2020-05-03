@@ -77,8 +77,8 @@ function createGame(gameInfos, socket) {
 
 function joinGame(gameName, socket) {
   if (gameExists(gameName)) {
-    if (games[gameName].getPlayerIndex(socket.id) < 0) {
-      console.log("Player is already in this room.");
+    if (games[gameName].getPlayerIndex(socket.id) >= 0) {
+      console.log("Player is already in this game.");
       return false;
     }
     let game = games[gameName];
@@ -88,7 +88,7 @@ function joinGame(gameName, socket) {
     game.join(socket.id);
     return gameName;
   }
-  console.log("Player " + socket.id + " tried to join non-existent room.");
+  console.log("Player " + socket.id + " tried to join non-existent game.");
   return false;
 }
 

@@ -17,14 +17,15 @@ export default class Connection {
   }
 
   createGame(name, size) {
+    let con = this;
     let gameInfos = { name: name, size: size };
     this.socket.emit("createGame", gameInfos, function (game) {
       if (game != false) {
         console.log("Game " + game + "created.");
-        this.gameCreated();
+        con.gameCreated();
       } else {
         console.log("Game exists already.");
-        this.gameNotCreated();
+        con.gameNotCreated();
       }
     });
   }
@@ -34,13 +35,14 @@ export default class Connection {
   gameNotCreated() {}
 
   joinGame(name) {
+    let con = this;
     this.socket.emit("joinGame", name, function (game) {
       if (game != false) {
         console.log("Game " + game + "joined.");
-        this.gameJoined();
+        con.gameJoined();
       } else {
         console.log("Game does not exist or player has already joined.");
-        this.gameNotJoined();
+        con.gameNotJoined();
       }
     });
   }
