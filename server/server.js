@@ -20,5 +20,12 @@ global.SOCKET_LIST = {};
 io.sockets.on("connection", newConnection);
 
 function newConnection(socket) {
+  console.log("New player with id " + socket.id + " connected.");
+  console.log(socket.handshake.query);
   SOCKET_LIST[socket.id] = socket;
+
+  socket.on("disconnect", () => {
+    console.log("Player with id " + socket.id + " disconnected.");
+    delete SOCKET_LIST[socket.id];
+  });
 }

@@ -13,6 +13,7 @@
 #### join server
 
 - parameters: name, password
+- What if connection fails?
 
 #### create game
 
