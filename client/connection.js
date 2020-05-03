@@ -12,6 +12,10 @@ export default class Connection {
     this.socket.on("diceRolled", (values) => {
       this.diceRolled(values);
     });
+
+    this.socket.on("updatePlayers", (data) => {
+      this.updatePlayers(data.players, data.playerNow);
+    });
   }
 
   connect() {
@@ -55,6 +59,15 @@ export default class Connection {
 
   gameNotJoined() {}
 
+  startGame() {
+    let con = this;
+    this.socket.emit("startGame", function (returnValue) {
+      if (!returnValue) {
+        console.log("Game could not be started.");
+      }
+    });
+  }
+
   roll(lockedDice = []) {
     this.socket.emit("roll", lockedDice);
   }
@@ -63,4 +76,6 @@ export default class Connection {
     console.log(values);
     return values;
   }
+
+  updatePlayer(players, playerNow) {}
 }

@@ -10,7 +10,7 @@ export default class Game {
   constructor(name, size) {
     this.name = name;
     this.players = [];
-    this.playerNow = 0;
+    this.playerNow = -1;
     this.size = size;
     this.dice = [];
     for (let i = 0; i < 5; i++) {
@@ -50,6 +50,19 @@ export default class Game {
       }
     }
     return -1;
+  }
+
+  start() {
+    if (this.playerNow < 0) {
+      // determine random start player
+      this.players.unshift(
+        this.players.splice(Math.floor(Math.random() * this.players.length), 1)
+      );
+
+      this.playerNow = 0;
+      return true;
+    }
+    return false;
   }
 
   lockDice(array) {

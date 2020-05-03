@@ -49,6 +49,10 @@ function newConnection(socket) {
     callback(joinGame(gameName, socket));
   });
 
+  socket.on("startGame", (callback) => {
+    callback(startGame(socket.id));
+  });
+
   socket.on("roll", (lockedDice) => {
     roll(lockedDice, socket.id);
   });
@@ -107,10 +111,31 @@ function getGameBySocketId(socketId) {
   return false;
 }
 
+function startGame(socketId) {
+  let game = getGameBySocketId(socketId);
+  if (game.start()) {
+    return true;
+  }
+  return false;
+}
+
 function roll(lockedDice, socketId) {
   let game = getGameBySocketId(socketId);
   game.lockDice(lockedDice);
 
   let values = game.rollDice();
   io.to(game.name).emit("diceRolled", values);
+}
+
+function updatePlayers(socketId) {
+  let game = getGameBySocketId(socketId);
+  let players = [];
+  for (let index in game.players) {
+    player = {};
+    player.scores = game.players[index].scores;
+    player.name = game.players[index].getName();
+  }
+
+  let data = { players: players, playerNow: game.playerNow };
+  io.to(game.name).emit("updatePlayers", data);
 }
