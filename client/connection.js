@@ -8,6 +8,10 @@ export default class Connection {
     this.username = username;
     this.password = password;
     this.socket = this.connect();
+
+    this.socket.on("diceRolled", (values) => {
+      this.diceRolled(values);
+    });
   }
 
   connect() {
@@ -50,4 +54,13 @@ export default class Connection {
   gameJoined() {}
 
   gameNotJoined() {}
+
+  roll(lockedDice = []) {
+    this.socket.emit("roll", lockedDice);
+  }
+
+  diceRolled(values) {
+    console.log(values);
+    return values;
+  }
 }

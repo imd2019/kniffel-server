@@ -4,6 +4,7 @@ Game class.
 */
 
 import Player from "./player.mjs";
+import Dice from "./dice.mjs";
 
 export default class Game {
   constructor(name, size) {
@@ -11,6 +12,10 @@ export default class Game {
     this.players = [];
     this.playerNow = 0;
     this.size = size;
+    this.dice = [];
+    for (let i = 0; i < 5; i++) {
+      this.dice.push(new Dice());
+    }
   }
 
   join(socketId) {
@@ -45,5 +50,29 @@ export default class Game {
       }
     }
     return -1;
+  }
+
+  lockDice(array) {
+    for (let element of this.dice) {
+      element.unlock();
+    }
+    for (let index in array) {
+      this.dice[array[index]].lock();
+    }
+  }
+
+  rollDice() {
+    for (let element of this.dice) {
+      element.roll();
+    }
+    return this.getDice();
+  }
+
+  getDice() {
+    let values = [];
+    for (let element of this.dice) {
+      values.push(element.value);
+    }
+    return values;
   }
 }

@@ -49,6 +49,10 @@ function newConnection(socket) {
     callback(joinGame(gameName, socket));
   });
 
+  socket.on("roll", (lockedDice) => {
+    roll(lockedDice, socket.id);
+  });
+
   socket.on("disconnect", () => {
     console.log("Player with id " + socket.id + " disconnected.");
     if (getGameBySocketId(socket.id) != false) {
@@ -101,4 +105,12 @@ function getGameBySocketId(socketId) {
     if (games[index].getPlayerIndex(socketId) >= 0) return games[index];
   }
   return false;
+}
+
+function roll(lockedDice, socketId) {
+  let game = getGameBySocketId(socketId);
+  game.lockDice(lockedDice);
+
+  let values = game.rollDice();
+  io.to(game.name).emit("diceRolled", values);
 }
