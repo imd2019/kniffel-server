@@ -51,6 +51,9 @@ function newConnection(socket) {
 
   socket.on("disconnect", () => {
     console.log("Player with id " + socket.id + " disconnected.");
+    if (getGameBySocketId(socket.id) != false) {
+      getGameBySocketId(socket.id).leave(socket.id);
+    }
     delete SOCKET_LIST[socket.id];
   });
 }
@@ -83,4 +86,11 @@ function joinGame(gameName, socket) {
 
 function gameExists(name) {
   return games.hasOwnProperty(name);
+}
+
+function getGameBySocketId(socketId) {
+  for (let index in games) {
+    if (games[index].getPlayerIndex(socketId) >= 0) return games[index];
+  }
+  return false;
 }

@@ -23,13 +23,20 @@ export default class Game {
 
   leave(socketId) {
     let index = this.getPlayerIndex(socketId);
+    console.log(
+      "Player " +
+        this.players[index].getName() +
+        " left the Game " +
+        this.name +
+        "."
+    );
     if (index >= 0) {
-      this.players.split(index, 1);
+      this.players.splice(index, 1);
     }
   }
   getPlayerIndex(socketId) {
     for (let index in this.players) {
-      if (this.player[index].socketId === socketId) {
+      if (this.players[index].socketId === socketId) {
         return index;
       }
     }

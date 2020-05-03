@@ -17,4 +17,13 @@ export default class Connection {
       query: "name=" + this.username + "&pw=" + this.password,
     });
   }
+
+  createRoom(name, size) {
+    let gameInfos = { name: name, size: size };
+    this.socket.emit("createGame", gameInfos);
+  }
+
+  joinRoom(name) {
+    this.socket.emit("joinGame", name);
+  }
 }
