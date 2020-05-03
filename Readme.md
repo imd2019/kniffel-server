@@ -25,7 +25,6 @@
 #### lobby
 
 - games overview
--
 
 #### games
 
@@ -50,39 +49,39 @@
 ## Structure
 
 ### Classes
-Server: 
-  games: Array
-  password: const 
-  SOCKET_LIST: Objekt: socketId, socket
-  
-  
-Player: 
-  - name : String
-  - id (socketId?)
-  - score:  assoziativ array ? 
-  
-    - setScore(scoreId, score)
-    - getScore(scoreId): return score
-    - calcBonus(): return bonus
-    - calcTotal(): return totalScore
+
+Server:
+games: Array
+password: const
+SOCKET_LIST: Objekt: socketId, socket
+
+Player:
+
+- name : String
+- id (socketId?)
+- score: assoziativ array ?
+
+  - setScore(scoreId, score)
+  - getScore(scoreId): return score
+  - calcBonus(): return bonus
+  - calcTotal(): return totalScore
 
 Game:
-  - players : Array
-  - dice: Array 
-  - playerNow: Index in players
-  
-    - saveScore(scoreID): return true/false
-    - getAllPlayerScore(): return Array 2D
-    - addPlayer(player) 
-    - rollDice() Da müssen wir schauen wie wir das mit gesperrten Würfeln machen!
-    - nextPlayer()
-    - reset ()
-    - (winner())
-  Prüfmethoden...
- Dice:
-  - value
-  
-    - roll()
-  
-  
+
+- players : Array
+- dice: Array
+- playerNow: Index in players
+  - saveScore(scoreID): return true/false
+  - getAllPlayerScore(): return Array 2D
+  - addPlayer(player)
+  - rollDice() Da müssen wir schauen wie wir das mit gesperrten Würfeln machen!
+  - nextPlayer()
+  - reset ()
+  - (winner())
+    Prüfmethoden...
+    Dice:
+- value
+
+  - roll()
+
 ## Dokumentation
