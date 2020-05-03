@@ -87,3 +87,16 @@ Game:
   - roll()
 
 ## Dokumentation
+
+###ClientSeite: 
+	connection.roll(lockedDice) 
+		>lockedDice: Array mit den Indizes von 0-4 mit den gelockten Würfel
+		return: Array mit den gewürfelten Werten 
+	
+	connection.startGame()
+		entscheidet auf der Server Seite der Startspieler legt diesen auch zum ersten mal Fest PlayerNow = 0; vorher -1 
+
+	connection.updatePlayers event
+		bekommt ein Objekt mit einer players Liste und einem playerNow index zu dieser
+
+	 
