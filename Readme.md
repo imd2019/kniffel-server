@@ -80,6 +80,7 @@ Game:
   - reset ()
   - (winner())
     Prüfmethoden...
+
     Dice:
 - value
 

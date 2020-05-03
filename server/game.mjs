@@ -1,0 +1,38 @@
+/*
+Game class.
+(c)2020 Florian Beck and Leander Schmidt.
+*/
+
+import Player from "./player.mjs";
+
+export default class Game {
+  constructor(name, size) {
+    this.name = name;
+    this.players = [];
+    this.playerNow = 0;
+    this.size = size;
+  }
+
+  join(socketId) {
+    let player = new Player(socketId);
+    this.players.push(player);
+    console.log(
+      "Player " + player.getName() + " joined the Game " + this.name + "."
+    );
+  }
+
+  leave(socketId) {
+    let index = this.getPlayerIndex(socketId);
+    if (index >= 0) {
+      this.players.split(index, 1);
+    }
+  }
+  getPlayerIndex(socketId) {
+    for (let index in this.players) {
+      if (this.player[index].socketId === socketId) {
+        return index;
+      }
+    }
+    return -1;
+  }
+}

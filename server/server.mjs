@@ -3,20 +3,23 @@ Genereal server setup and communication.
 (c)2020 Florian Beck and Leander Schmidt.
 */
 
-// setup
+import Game from "./game.mjs";
+import express from "express";
+import socket from "socket.io";
 
-let express = require("express");
+// setup
+//let express = require("express");
 let app = express();
 const port = process.env.PORT || 3000;
 let server = app.listen(port);
 const password = "ILoveIMD2020";
 console.log("Server listening on port " + port + " ...");
 
-let socket = require("socket.io");
+//let socket = require("socket.io");
 let io = socket(server);
 
 global.SOCKET_LIST = {};
-let games = [];
+let games = {};
 
 io.sockets.on("connection", newConnection);
 
@@ -53,33 +56,31 @@ function newConnection(socket) {
 }
 
 function createGame(gameInfos, socket) {
-  if (findGame(gameInfos.name) === false) {
-    games.push(gameInfos);
-    //console.log(games);
+  if (!gameExists(gameInfos.name)) {
     socket.join(gameInfos.name, function () {
       console.log(
         "Player " + socket.id + " created Room " + gameInfos.name + "."
       );
     });
+    let game = new Game(gameInfos.name, gameInfos.size);
+    game.join(socket.id);
+    games[game.name] = game;
+    //console.log(games);
   } else {
     console.log("Game exists already"); // EVTL noch zu einem Event für die Clientseite hinzufügen
   }
 }
 
 function joinGame(gameName, socket) {
-  let game = findGame(gameName);
-  if (game != false) {
+  if (gameExists(gameName)) {
+    let game = games[gameName];
     socket.join(gameName, function () {
       console.log("Player " + socket.id + " joined Room " + gameName + ".");
     });
+    game.join(socket.id);
   }
 }
 
-function findGame(name) {
-  for (let index of games) {
-    if (index.name === name) {
-      return index;
-    }
-  }
-  return false;
+function gameExists(name) {
+  return games.hasOwnProperty(name);
 }
