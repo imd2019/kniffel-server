@@ -17,7 +17,7 @@
 
 #### create game
 
-- parameters: amount of players
+- parameters: name, amount of players
 
 #### join game
 
