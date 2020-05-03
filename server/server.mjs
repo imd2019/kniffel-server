@@ -41,8 +41,8 @@ function newConnection(socket) {
     socket.disconnect();
   }
 
-  socket.on("createGame", (gameInfos) => {
-    createGame(gameInfos, socket);
+  socket.on("createGame", (gameInfos, callback) => {
+    createGame(gameInfos, socket, callback);
   });
 
   socket.on("joinGame", (gameName) => {
@@ -58,7 +58,7 @@ function newConnection(socket) {
   });
 }
 
-function createGame(gameInfos, socket) {
+function createGame(gameInfos, socket, callback) {
   if (!gameExists(gameInfos.name)) {
     socket.join(gameInfos.name, function () {
       console.log(
@@ -69,8 +69,10 @@ function createGame(gameInfos, socket) {
     game.join(socket.id);
     games[game.name] = game;
     //console.log(games);
+    callback(game.name);
   } else {
-    console.log("Game exists already"); // EVTL noch zu einem Event für die Clientseite hinzufügen
+    console.log("Game exists already."); // EVTL noch zu einem Event für die Clientseite hinzufügen
+    callback(false);
   }
 }
 

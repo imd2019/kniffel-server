@@ -3,8 +3,6 @@ Connection to server.
 (c)2020 Florian Beck and Leander Schmidt.
 */
 
-// setup
-
 export default class Connection {
   constructor(username, password) {
     this.username = username;
@@ -18,12 +16,20 @@ export default class Connection {
     });
   }
 
-  createRoom(name, size) {
+  createGame(name, size) {
     let gameInfos = { name: name, size: size };
-    this.socket.emit("createGame", gameInfos);
+    this.socket.emit("createGame", gameInfos, function (game) {
+      if (game != false) {
+        console.log("Game " + game + "created.");
+      } else {
+        console.log("Game exists already.");
+      }
+    });
   }
 
-  joinRoom(name) {
+  joinGame(name) {
     this.socket.emit("joinGame", name);
   }
+
+  gameJoined(bool) {}
 }

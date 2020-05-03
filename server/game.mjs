@@ -14,11 +14,15 @@ export default class Game {
   }
 
   join(socketId) {
-    let player = new Player(socketId);
-    this.players.push(player);
-    console.log(
-      "Player " + player.getName() + " joined the Game " + this.name + "."
-    );
+    if (this.getPlayerIndex(socketId) < 0) {
+      let player = new Player(socketId);
+      this.players.push(player);
+      console.log(
+        "Player " + player.getName() + " joined the Game " + this.name + "."
+      );
+      return true;
+    }
+    return false;
   }
 
   leave(socketId) {
