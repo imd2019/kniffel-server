@@ -21,15 +21,25 @@ export default class Connection {
     this.socket.emit("createGame", gameInfos, function (game) {
       if (game != false) {
         console.log("Game " + game + "created.");
+        this.gameCreated();
       } else {
         console.log("Game exists already.");
       }
     });
   }
 
+  gameCreated() {}
+
   joinGame(name) {
-    this.socket.emit("joinGame", name);
+    this.socket.emit("joinGame", name, function (game) {
+      if (game != false) {
+        console.log("Game " + game + "joined.");
+        this.gameJoined();
+      } else {
+        console.log("Game does not exist.");
+      }
+    });
   }
 
-  gameJoined(bool) {}
+  gameJoined() {}
 }
