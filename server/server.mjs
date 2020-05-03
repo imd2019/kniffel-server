@@ -62,7 +62,7 @@ function createGame(gameInfos, socket) {
   if (!gameExists(gameInfos.name)) {
     socket.join(gameInfos.name, function () {
       console.log(
-        "Player " + socket.id + " created Room " + gameInfos.name + "."
+        "Player " + socket.id + " created room " + gameInfos.name + "."
       );
     });
     let game = new Game(gameInfos.name, gameInfos.size);
@@ -70,24 +70,26 @@ function createGame(gameInfos, socket) {
     games[game.name] = game;
     //console.log(games);
     return game.name;
-  } else {
-    console.log("Game exists already."); // EVTL noch zu einem Event für die Clientseite hinzufügen
-    return false;
   }
+  console.log("Game exists already."); // EVTL noch zu einem Event für die Clientseite hinzufügen
+  return false;
 }
 
 function joinGame(gameName, socket) {
   if (gameExists(gameName)) {
+    if (games[gameName].getPlayerIndex(socket.id) < 0) {
+      console.log("Player is already in this room.");
+      return false;
+    }
     let game = games[gameName];
     socket.join(gameName, function () {
-      console.log("Player " + socket.id + " joined Room " + gameName + ".");
+      console.log("Player " + socket.id + " joined room " + gameName + ".");
     });
     game.join(socket.id);
     return gameName;
-  } else {
-    console.log("Player " + socket.id + " tried to join non-existent Room.");
-    return false;
   }
+  console.log("Player " + socket.id + " tried to join non-existent room.");
+  return false;
 }
 
 function gameExists(name) {

@@ -18,7 +18,7 @@ export default class Game {
       let player = new Player(socketId);
       this.players.push(player);
       console.log(
-        "Player " + player.getName() + " joined the Game " + this.name + "."
+        "Player " + player.getName() + " joined the game " + this.name + "."
       );
       return true;
     }
@@ -30,7 +30,7 @@ export default class Game {
     console.log(
       "Player " +
         this.players[index].getName() +
-        " left the Game " +
+        " left the game " +
         this.name +
         "."
     );

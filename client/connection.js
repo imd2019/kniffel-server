@@ -24,11 +24,14 @@ export default class Connection {
         this.gameCreated();
       } else {
         console.log("Game exists already.");
+        this.gameNotCreated();
       }
     });
   }
 
   gameCreated() {}
+
+  gameNotCreated() {}
 
   joinGame(name) {
     this.socket.emit("joinGame", name, function (game) {
@@ -36,10 +39,13 @@ export default class Connection {
         console.log("Game " + game + "joined.");
         this.gameJoined();
       } else {
-        console.log("Game does not exist.");
+        console.log("Game does not exist or player has already joined.");
+        this.gameNotJoined();
       }
     });
   }
 
   gameJoined() {}
+
+  gameNotJoined() {}
 }
