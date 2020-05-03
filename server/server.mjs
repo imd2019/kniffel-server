@@ -57,6 +57,10 @@ function newConnection(socket) {
     roll(lockedDice, socket.id);
   });
 
+  socket.on("saveResult", (selectedField, callback) => {
+    callback(saveResult(selectedField, socket.id));
+  });
+
   socket.on("disconnect", () => {
     console.log("Player with id " + socket.id + " disconnected.");
     if (getGameBySocketId(socket.id) != false) {
@@ -125,6 +129,12 @@ function roll(lockedDice, socketId) {
 
   let values = game.rollDice();
   io.to(game.name).emit("diceRolled", values);
+}
+
+function saveResult(selectedField, socketId) {
+  let game = getGameBySocketId(socketId);
+
+  return false;
 }
 
 function updatePlayers(socketId) {

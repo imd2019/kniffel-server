@@ -77,5 +77,19 @@ export default class Connection {
     return values;
   }
 
+  saveResult(selectedField) {
+    let con = this;
+    this.socket.emit("saveResult", selectedField, function (returnValue) {
+      if (!returnValue) {
+        console.log(
+          "It is not your turn or result could not be safed into selected field."
+        );
+        con.resultNotSaved();
+      }
+    });
+  }
+
+  resultNotSaved() {}
+
   updatePlayer(players, playerNow) {}
 }
