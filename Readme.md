@@ -120,12 +120,15 @@ connection.joinGame(_name_)
 		Misserfolg: gameNotJoined()
 
 connection.leaveGame()
+	
 	verlässt das aktuelle Spiel
 
 connection.startGame()
+	
 	entscheidet auf der Server Seite der Startspieler legt diesen auch zum ersten mal Fest PlayerNow = 0; vorher -1
 
 connection.getGamesList()
+	
 	return List aller Spiel Namen
 
 connection.saveScore(_scoreField_)
