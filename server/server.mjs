@@ -128,6 +128,7 @@ function joinGame(gameName, socket) {
       console.log("Player " + socket.id + " joined room " + gameName + ".");
     });
     game.join(socket.id);
+    io.to(game.name).emit("playerJoined", socket.name);
     return gameName;
   }
   console.log(
