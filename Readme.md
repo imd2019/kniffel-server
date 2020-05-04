@@ -105,7 +105,7 @@ Es wird dabei stets das Spiel gestartet, dem der Spieler beigetreten ist, der di
 
 #### Spielzüge
 
-Ein Spielzug besteht aus bis zu dreimal Würfeln, ggf. Sperren von Würfeln, Wählen eines Feldes und Speichern. Nachfolgend ist ein beispielhafter Spielzug dargestellt.
+Ein Spielzug besteht aus bis zu dreimal Würfeln, ggf. Sperren von Würfeln, Wählen eines Feldes und Speichern. Nachfolgend ist ein beispielhafter Spielzug dargestellt:
 
 ```javascript
 client.roll();
@@ -114,7 +114,7 @@ client.roll([0, 1, 4]);
 client.saveResult(client.fields.THREES);
 ```
 
-Dabei werden die gesperrten Würfel `roll()` in Form ihrer Indizes in einem Array übergeben. Das Feld wird beim Speichern in Form eines Werts aus dem Enumerable `client.fields` übergeben. Für eine Übersicht aller möglichen Werte, siehe unten in der [Methodenübersicht](#methodenübersicht).
+Dabei werden die gesperrten Würfel `roll()` in Form ihrer Indizes in einem Array übergeben. Das gewählte Feld wird beim Speichern in Form eines Werts aus dem Enumerable `client.fields` übergeben. Für eine Übersicht aller möglichen Werte siehe unten in der [Methodenübersicht](#methodenübersicht).
 
 #### Spielende oder Verlassen eines Spiels
 
@@ -139,31 +139,39 @@ Verlassen alle Spieler ein Spiel, wird dieses gelöscht.
 Nachfolgend sind noch einmal alle Methoden von `Client` aufgeführt:
 
 - `connect(username, password, url (optional))`
+
   Stellt die Verbindung zum Server her. Das Passwort für den Serverbeitritt wird vom Serverbetreiber zur Verfügung gestellt. `username` entspricht dem Anzeigenamen auf dem Server.
   Wird keine URL übergeben, wird die Default-Option `"localhost:3000/"` aufgerufen.
 
 - `getGamesList()`
+
   Sendet eine Anfrage an den Server, eine Liste der vorhandenen Spiele zu senden.
 
 - `createGame(name, size, complete)`
+
   Sendet eine Anfrage an den Server, ein neues Spiel zu erstellen.
   Der Parameter `complete` kann auf `true` (vollständiges Spiel, oberer und unterer Block werden gespielt) oder `false` (einfaches Spiel, nur der erste Block wird gespielt) gesetzt werden.
 
 - `joinGame(name)`
+
   Sendet eine Anfrage an den Server, dem gewählten Spiel beizutreten. Dieses wird als Parameter übergeben (Spielname als String).
 
 - `leaveGame()`
+
   Sendet eine Anfrage an den Server, das Spiel zu verlassen. Kann nur aufgerufen werden, wenn man zuvor einem Spiel beigetreten ist.
 
 - `startGame()`
+
   Sendet eine Anfrage an den Server, das Spiel zu starten. Kann nur aufgerufen werden, wenn man zuvor einem Spiel beigetreten ist und das Spiel noch nicht begonnen hat.
 
 - `roll([])`
+
   Sendet eine Anfrage an den Server, zu würfeln. Kann nur aufgerufen werden, wenn man zuvor einem Spiel beigetreten ist und das Spiel gestartet wurde.
   Sollen Würfel gesperrt werden, müssen sie als Array mit den Indizes der gewählten Würfel übergeben werden.
   Sollen also bspw. der erste und der vierte Würfel nicht erneut gewürfelt werden, muss `roll()` als Parameter `[0, 3]` übergeben werden.
 
 - `saveResult(selectedField)`
+
   Sendet eine Anfrage an den Server, das Würfelergebnis im gewählten Feld zu speichern.
   Das gewählte Feld wird als Parameter übergeben. Hierzu wird es aus dem `client.fields`-Enumerable ausgewählt.
   Soll also bspw. das Würfelergebnis als Viererpasch gespeichert werden, wird als Parameter `client.fields.FOUROFAKIND` übergeben.
@@ -187,6 +195,7 @@ Nachfolgend sind noch einmal alle Methoden von `Client` aufgeführt:
   Ist beim Erstellen des Spiels der Modus auf `complete = false` gesetzt worden, dürfen nur Felder aus dem oberen Block gewählt werden!
 
 - `restartGame()`
+
   Sendet eine Anfrage an den Server, das gegenwärtige Spiel neu zu starten. Kann nur aufgerufen werden, wenn man zuvor einem Spiel beigetreten ist und das Spiel gestartet wurde.
 
 ## Eventhandler-Übersicht
