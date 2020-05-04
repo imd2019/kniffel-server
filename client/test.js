@@ -6,3 +6,5 @@ connection.createGame("Partykammer", 4);
 connection.joinGame("Partykammer");
 connection.roll();
 connection.roll([1, 4]);
+connection.startGame();
+connection.saveResult("ones");

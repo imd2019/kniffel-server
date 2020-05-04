@@ -91,5 +91,7 @@ export default class Connection {
 
   resultNotSaved() {}
 
-  updatePlayer(players, playerNow) {}
+  updatePlayers(players, playerNow) {
+    console.log(players);
+  }
 }

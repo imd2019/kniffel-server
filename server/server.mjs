@@ -133,7 +133,10 @@ function roll(lockedDice, socketId) {
 
 function saveResult(selectedField, socketId) {
   let game = getGameBySocketId(socketId);
-
+  if (game.isPlayerNow(socketId)) {
+    updatePlayers(socketId);
+    return true;
+  }
   return false;
 }
 
@@ -141,11 +144,13 @@ function updatePlayers(socketId) {
   let game = getGameBySocketId(socketId);
   let players = [];
   for (let index in game.players) {
-    player = {};
+    let player = {};
     player.scores = game.players[index].scores;
     player.name = game.players[index].getName();
+    players.push(player);
   }
 
   let data = { players: players, playerNow: game.playerNow };
+
   io.to(game.name).emit("updatePlayers", data);
 }

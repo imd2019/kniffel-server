@@ -43,6 +43,7 @@ export default class Game {
       this.players.splice(index, 1);
     }
   }
+
   getPlayerIndex(socketId) {
     for (let index in this.players) {
       if (this.players[index].socketId === socketId) {
@@ -52,11 +53,18 @@ export default class Game {
     return -1;
   }
 
+  isPlayerNow(socketId) {
+    return socketId === this.players[this.playerNow].id;
+  }
+
   start() {
     if (this.playerNow < 0) {
       // determine random start player
       this.players.unshift(
-        this.players.splice(Math.floor(Math.random() * this.players.length), 1)
+        this.players.splice(
+          Math.floor(Math.random() * this.players.length),
+          1
+        )[0]
       );
 
       this.playerNow = 0;
@@ -87,5 +95,14 @@ export default class Game {
       values.push(element.value);
     }
     return values;
+  }
+
+  saveScore(selectedField) {
+    let plNow = this.players[this.playerNow];
+    if (plNow.score[selectedField] === null) {
+      plNow.score[selectedField] = calcScore(selectedField);
+      return true;
+    }
+    return false;
   }
 }
