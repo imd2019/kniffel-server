@@ -18,6 +18,7 @@ export default class Client {
       this.updatePlayers(data.players, data.playerNow);
     });
     this.socket.on("playerLeft", this.playerLeft);
+    this.socket.on("playerJoined", this.playerJoined);
   }
 
   getGamesList() {
@@ -115,6 +116,10 @@ export default class Client {
 
   updatePlayers(players, playerNow) {
     console.log(players);
+  }
+
+  playerJoined(player) {
+    console.log("Player " + player + " joined the game.");
   }
 
   playerLeft(player) {

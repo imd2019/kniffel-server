@@ -3,10 +3,9 @@ import Client from "./client.js";
 let client = new Client("test", "ILoveIMD2020");
 
 client.connect("Tester", "ILoveIMD2020");
-client.createGame("Partykammer", 1, true);
-client.createGame("Paaaartyyyyy!!!", 1, true);
-client.getGamesList();
+client.createGame("Partykammer", 2, true);
 client.joinGame("Partykammer");
+client.getGamesList();
 client.startGame();
 client.roll();
 client.roll([1, 4]);

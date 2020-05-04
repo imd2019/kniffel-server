@@ -129,6 +129,7 @@ function joinGame(gameName, socket) {
       console.log("Player " + socket.id + " joined room " + gameName + ".");
     });
     game.join(socket.id);
+    io.to(game.name).emit("playerJoined", socket.name);
     return gameName;
   }
   console.log(
@@ -142,7 +143,7 @@ function joinGame(gameName, socket) {
 function leaveGame(socketId) {
   let game = getGameBySocketId(socketId);
   if (game) {
-    let player = game.players[game.getPlayerIndex(socketId)].name;
+    let player = game.players[game.getPlayerIndex(socketId)].getName();
     if (game.leave(socketId)) {
       console.log("Game " + game.name + " deleted. All players left.");
       delete games[game.name];
