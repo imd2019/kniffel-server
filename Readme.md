@@ -1,6 +1,7 @@
 # Kniffel-Server
 
 Studiengang Interactive Media Design, Sommersemester 2020.
+
 Leander Schmidt, Florian Beck, Garrit Schaap.
 
 ## Spielablauf
