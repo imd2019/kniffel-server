@@ -103,15 +103,17 @@ new Connection(_username_, _password_)
 connection.roll(_lockedDice_)
 
 	_lockedDice_: Array mit den Indizes von 0-4 mit den gelockten Würfel
+	
 		Erfolg: diceRolled Event wird ausgerufen mit den values und an alle RaumTeilnehmer versandt
 		Misserfolg: Error Anzahl der Maximalen Würfe wurde erreicht throwNotAllowed wird aufgerufen
 connection.createGame(_name_, _size_,_complete_)
 
 	_name_: Name des Spiels
 	_size_: maximale Spielerzahl
+	_complete_: gibt an ob das Spiel alle Felder oder nur die Oberen hat. Ändert die Bonus Berechnung in CalcTotal
+
 		Erfolg: gameCreated()
 		Misserfolg: gameNotCreated()
-	_complete_: gibt an ob das Spiel alle Felder oder nur die Oberen hat. Ändert die Bonus Berechnung in CalcTotal
 
 connection.joinGame(_name_)
 
@@ -120,17 +122,21 @@ connection.joinGame(_name_)
 		Misserfolg: gameNotJoined()
 
 connection.leaveGame()
+	
 	verlässt das aktuelle Spiel
 
 connection.startGame()
+	
 	entscheidet auf der Server Seite der Startspieler legt diesen auch zum ersten mal Fest PlayerNow = 0; vorher -1
 
 connection.getGamesList()
+	
 	return List aller Spiel Namen
 
 connection.saveScore(_scoreField_)
 	
 	_scoreField_: Der Name des Scorefeldes in dem der Score gespeichert werden soll 
+	
 		Erfolg: sendet an alle Spieler ein updatePlayer Event und der score wird eingetragen
 		Misserfolg: Fehler: Man ist selbst nicht dran oder das scoreField ist falsch 
 
