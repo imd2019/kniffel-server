@@ -8,18 +8,19 @@ import express from "express";
 import socket from "socket.io";
 
 // setup
-//let express = require("express");
+
 let app = express();
 const port = process.env.PORT || 3000;
 const password = process.env.PASSWORD || "ILoveIMD2020";
 let server = app.listen(port);
 console.log("Server listening on port " + port + " ...");
 
-//let socket = require("socket.io");
 let io = socket(server);
 
 global.SOCKET_LIST = {};
 let games = {};
+
+// communication
 
 io.sockets.on("connection", newConnection);
 
@@ -106,7 +107,6 @@ function createGame(gameInfos, socket) {
     let game = new Game(gameInfos.name, gameInfos.size, gameInfos.complete);
     game.join(socket.id);
     games[game.name] = game;
-    //console.log(games);
     return game.name;
   }
   console.log("Game exists already or size is to small."); // EVTL noch zu einem Event für die Clientseite hinzufügen
