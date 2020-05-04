@@ -1,15 +1,15 @@
 import Client from "./client.js";
 
-let connection = new Client("test", "ILoveIMD2020");
+let client = new Client("test", "ILoveIMD2020");
 
-connection.createGame("Partykammer", 1, true);
-connection.createGame("Paaaartyyyyy!!!", 1, true);
-connection.getGamesList();
-connection.joinGame("Partykammer");
-connection.startGame();
-connection.roll();
-connection.roll([1, 4]);
-connection.roll();
-connection.roll();
-connection.saveResult("ones");
-connection.leaveGame();
+client.connect("Tester", "ILoveIMD2020");
+client.createGame("Partykammer", 1, true);
+client.createGame("Paaaartyyyyy!!!", 1, true);
+client.getGamesList();
+client.joinGame("Partykammer");
+client.startGame();
+client.roll();
+client.roll([1, 4]);
+client.roll();
+client.roll();
+client.saveResult("ones");

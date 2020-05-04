@@ -6,18 +6,18 @@ Connection to server.
 export default class Client {
   constructor() {
     this.socket;
+  }
+
+  connect(username, password, url = "localhost:3000/") {
+    this.socket = io.connect(url, {
+      query: "name=" + username + "&pw=" + password,
+    });
 
     this.socket.on("diceRolled", this.diceRolled);
-
     this.socket.on("updatePlayers", (data) => {
       this.updatePlayers(data.players, data.playerNow);
     });
-  }
-
-  connect(url = "localhost:3000/", username, password) {
-    this.socket = io.connect(url, {
-      query: "name=" + this.username + "&pw=" + this.password,
-    });
+    this.socket.on("playerLeft", this.playerLeft);
   }
 
   getGamesList() {
@@ -115,5 +115,9 @@ export default class Client {
 
   updatePlayers(players, playerNow) {
     console.log(players);
+  }
+
+  playerLeft(player) {
+    console.log("Player " + player + " left the game.");
   }
 }
