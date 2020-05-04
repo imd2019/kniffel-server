@@ -17,6 +17,7 @@ export default class Client {
     this.socket.on("updatePlayers", this.updatePlayers);
     this.socket.on("playerLeft", this.playerLeft);
     this.socket.on("playerJoined", this.playerJoined);
+    this.socket.on("gameStarted", this.gameStarted);
   }
 
   getGamesList() {
@@ -77,6 +78,10 @@ export default class Client {
     });
   }
 
+  gameStarted() {
+    console.log("Game Started");
+  }
+
   roll(lockedDice = []) {
     let con = this;
     this.socket.emit("roll", lockedDice, function (returnValue) {
@@ -91,7 +96,6 @@ export default class Client {
 
   diceRolled(values) {
     console.log(values);
-    return values;
   }
 
   saveResult(selectedField) {
