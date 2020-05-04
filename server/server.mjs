@@ -11,8 +11,8 @@ import socket from "socket.io";
 //let express = require("express");
 let app = express();
 const port = process.env.PORT || 3000;
+const password = process.env.PASSWORD || "ILoveIMD2020";
 let server = app.listen(port);
-const password = "ILoveIMD2020";
 console.log("Server listening on port " + port + " ...");
 
 //let socket = require("socket.io");
