@@ -90,7 +90,6 @@ Game:
 
 ## Dokumentation
 
-(
 ###ClientSeite:
 
 new Connection(_username_, _password_)
@@ -104,13 +103,13 @@ connection.roll(_lockedDice_)
 connection.createGame(_name_, _size_)
 	_name_: Name des Spiels
 	_size_: maximale Spielerzahl
-		Erfolg: gameCreated();
-		Misserfolg: gameNotCreated())
+		Erfolg: gameCreated()
+		Misserfolg: gameNotCreated()
 
 connection.joinGame(_name_)
 	_name_: Name des Spiels
-		Erfolg: gameJoined();
-		Misserfolg: gameNotJoined())
+		Erfolg: gameJoined()
+		Misserfolg: gameNotJoined()
 
 
 connection.startGame()
