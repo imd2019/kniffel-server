@@ -3,7 +3,6 @@
 ## Spielablauf
 
 Um dem Server beizutreten, muss ein persönlicher Nutzername angelegt werden. Nutzernamen können mehrfach vorkommen, allerdings empfiehlt es sich der Unterscheidbarkeit halber, einen möglichst eindeutigen und einmaligen Nutzernamen zu wählen.
-
 Nachdem man dem Server beigetreten ist, befindet man sich zunächst in der Lobby, wo einem alle vorhandenen Spiele angezeigt werden, sowie deren Größe und wieviele Spieler bereits beigetreten sind.
 
 Hier kann man nun einem vorhandenen Spiel beitreten oder ein neues Spiel erstellen. Dabei werden der Name des Spiels sowie die maximale Spielerzahl (Größe) festgelegt und ob das Spiel den vollständigen Kniffel-Block spielen soll oder nur die obere Hälfte.
