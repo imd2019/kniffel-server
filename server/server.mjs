@@ -40,8 +40,9 @@ function newConnection(socket) {
     console.log(
       "Player with id " +
         socket.id +
-        " disconnected from Server. WRONG PASSWORD."
+        " disconnected from Server. Wrong password."
     );
+    socket.emit("wrongPassword");
     socket.disconnect();
   }
 

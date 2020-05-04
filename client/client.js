@@ -24,10 +24,12 @@ export default class Client {
     };
     Object.freeze(this.fields);
     this.errorList = {
+      "001": "Could not connect to the server.",
+      "002": "Could not connect to the server. The provided password is wrong.",
       "101": "You cannot create a game. You are already in a game.",
       "102": "A game with this name exists already.",
       "103": "A game needs at least one player.",
-      "201": "You cannot join a game. You are already in a game.",
+      "201": "You cannot join more than one game. You are already in a game.",
       "202": "A game with this name does not exist.",
       "203": "This game is full.",
       "204": "This game already started.",
@@ -49,16 +51,25 @@ export default class Client {
   }
 
   connect(username, password, url = "localhost:3000/") {
+    let manager = io.Manager(url);
+    let con = this;
+    manager.on("connect_error", function () {
+      console.log("Error 001: " + con.errorList["001"]);
+    });
+
     let pwHash = calcMD5(password);
     this.socket = io.connect(url, {
       query: "name=" + username + "&pw=" + pwHash,
     });
 
+    this.socket.on("wrongPassword", function () {
+      console.log("Error 002: " + con.errorList["002"]);
+    });
+    this.socket.on("playerJoined", this.playerJoined);
+    this.socket.on("gameStarted", this.gameStarted);
     this.socket.on("diceRolled", this.diceRolled);
     this.socket.on("updatePlayers", this.updatePlayers);
     this.socket.on("playerLeft", this.playerLeft);
-    this.socket.on("playerJoined", this.playerJoined);
-    this.socket.on("gameStarted", this.gameStarted);
   }
 
   getGamesList() {

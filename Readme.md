@@ -217,7 +217,10 @@ connection.diceRolled(_values_)
 
 Nachfolgend ist eine Liste aller möglichen Fehlermeldungen auf Client-Seite dargestellt:
 
-// Fehler beim Verbinden zum Server?
+- 000 Fehler beim Verbinden mit dem Server
+
+  - 001: Could not connect to the server.
+  - 002: Could not connect to the server. The provided password is wrong.
 
 - 100 Fehler beim Erstellen eines Spiels (createGame)
 
@@ -227,7 +230,7 @@ Nachfolgend ist eine Liste aller möglichen Fehlermeldungen auf Client-Seite dar
 
 - 200 Fehler beim Beitreten (joinGame)
 
-  - 201: You cannot join a game. You are already in a game.
+  - 201: You cannot join more than one game. You are already in a game.
   - 202: A game with this name does not exist.
   - 203: This game is full.
   - 204: This game already started.
