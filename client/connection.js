@@ -24,12 +24,23 @@ export default class Connection {
     });
   }
 
+  getGamesList() {
+    let con = this;
+    this.socket.emit("getGames", function (games) {
+      con.gamesListReturned(games);
+    });
+  }
+
+  gamesListReturned(games) {
+    console.log(games);
+  }
+
   createGame(name, size) {
     let con = this;
     let gameInfos = { name: name, size: size };
     this.socket.emit("createGame", gameInfos, function (game) {
-      if (game != false) {
-        console.log("Game " + game + "created.");
+      if (game) {
+        console.log("Game " + game + " created.");
         con.gameCreated();
       } else {
         console.log("Game exists already.");
@@ -45,11 +56,13 @@ export default class Connection {
   joinGame(name) {
     let con = this;
     this.socket.emit("joinGame", name, function (game) {
-      if (game != false) {
+      if (game) {
         console.log("Game " + game + "joined.");
         con.gameJoined();
       } else {
-        console.log("Game does not exist or player has already joined.");
+        console.log(
+          "Game does not exist, you are already in a game or player has already joined."
+        );
         con.gameNotJoined();
       }
     });
@@ -58,6 +71,10 @@ export default class Connection {
   gameJoined() {}
 
   gameNotJoined() {}
+
+  leaveGame() {
+    this.socket.emit("leaveGame");
+  }
 
   startGame() {
     let con = this;
@@ -69,8 +86,16 @@ export default class Connection {
   }
 
   roll(lockedDice = []) {
-    this.socket.emit("roll", lockedDice);
+    let con = this;
+    this.socket.emit("roll", lockedDice, function (returnValue) {
+      if (!returnValue) {
+        console.log("Maximum throws reached.");
+        con.rollNotAllowed();
+      }
+    });
   }
+
+  rollNotAllowed() {}
 
   diceRolled(values) {
     console.log(values);

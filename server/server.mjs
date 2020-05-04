@@ -41,6 +41,10 @@ function newConnection(socket) {
     socket.disconnect();
   }
 
+  socket.on("getGames", (callback) => {
+    callback(getGames());
+  });
+
   socket.on("createGame", (gameInfos, callback) => {
     callback(createGame(gameInfos, socket));
   });
@@ -49,12 +53,16 @@ function newConnection(socket) {
     callback(joinGame(gameName, socket));
   });
 
+  socket.on("leaveGame", () => {
+    leaveGame(socket.id);
+  });
+
   socket.on("startGame", (callback) => {
     callback(startGame(socket.id));
   });
 
-  socket.on("roll", (lockedDice) => {
-    roll(lockedDice, socket.id);
+  socket.on("roll", (lockedDice, callback) => {
+    callback(roll(lockedDice, socket.id));
   });
 
   socket.on("saveResult", (selectedField, callback) => {
@@ -63,15 +71,25 @@ function newConnection(socket) {
 
   socket.on("disconnect", () => {
     console.log("Player with id " + socket.id + " disconnected.");
-    if (getGameBySocketId(socket.id) != false) {
-      getGameBySocketId(socket.id).leave(socket.id);
-    }
+    leaveGame(socket.id);
     delete SOCKET_LIST[socket.id];
   });
 }
 
+function getGames() {
+  let gamesList = [];
+  for (let index in games) {
+    gamesList.push(index);
+  }
+  return gamesList;
+}
+
 function createGame(gameInfos, socket) {
-  if (!gameExists(gameInfos.name)) {
+  if (
+    !getGameBySocketId(socket.id) &&
+    !gameExists(gameInfos.name) &&
+    gameInfos.size > 0
+  ) {
     socket.join(gameInfos.name, function () {
       console.log(
         "Player " + socket.id + " created room " + gameInfos.name + "."
@@ -83,12 +101,16 @@ function createGame(gameInfos, socket) {
     //console.log(games);
     return game.name;
   }
-  console.log("Game exists already."); // EVTL noch zu einem Event für die Clientseite hinzufügen
+  console.log("Game exists already or size is to small."); // EVTL noch zu einem Event für die Clientseite hinzufügen
   return false;
 }
 
 function joinGame(gameName, socket) {
-  if (gameExists(gameName)) {
+  if (
+    !getGameBySocketId(socket.id) &&
+    gameExists(gameName) &&
+    games[gameName].players.length < games[gameName].size
+  ) {
     if (games[gameName].getPlayerIndex(socket.id) >= 0) {
       console.log("Player is already in this game.");
       return false;
@@ -100,8 +122,22 @@ function joinGame(gameName, socket) {
     game.join(socket.id);
     return gameName;
   }
-  console.log("Player " + socket.id + " tried to join non-existent game.");
+  console.log(
+    "Player " +
+      socket.id +
+      " tried to join non-existent game or the game is full."
+  );
   return false;
+}
+
+function leaveGame(socketId) {
+  let game = getGameBySocketId(socketId);
+  if (game) {
+    if (game.leave(socketId)) {
+      console.log("Game " + game.name + " deleted. All players left.");
+      delete games[game.name];
+    }
+  }
 }
 
 function gameExists(name) {
@@ -117,25 +153,36 @@ function getGameBySocketId(socketId) {
 
 function startGame(socketId) {
   let game = getGameBySocketId(socketId);
-  if (game.start()) {
-    return true;
+  if (game) {
+    if (game.start()) {
+      return true;
+    }
   }
   return false;
 }
 
 function roll(lockedDice, socketId) {
   let game = getGameBySocketId(socketId);
-  game.lockDice(lockedDice);
+  if (game) {
+    game.lockDice(lockedDice);
 
-  let values = game.rollDice();
-  io.to(game.name).emit("diceRolled", values);
+    let values = game.rollDice();
+    if (values) {
+      io.to(game.name).emit("diceRolled", values);
+      return true;
+    }
+  }
+  return false;
 }
 
 function saveResult(selectedField, socketId) {
   let game = getGameBySocketId(socketId);
-  if (game.isPlayerNow(socketId)) {
-    updatePlayers(socketId);
-    return true;
+  if (game) {
+    if (game.isPlayerNow(socketId)) {
+      if (!game.saveScore(selectedField)) return false;
+      updatePlayers(socketId);
+      return true;
+    }
   }
   return false;
 }
