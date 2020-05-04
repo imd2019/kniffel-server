@@ -26,8 +26,9 @@ export default class Client {
   }
 
   connect(username, password, url = "localhost:3000/") {
+    let pwHash = calcMD5(password);
     this.socket = io.connect(url, {
-      query: "name=" + username + "&pw=" + password,
+      query: "name=" + username + "&pw=" + pwHash,
     });
 
     this.socket.on("diceRolled", this.diceRolled);
