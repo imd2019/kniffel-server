@@ -181,6 +181,9 @@ function startGame(socketId) {
 function roll(lockedDice, socketId) {
   let game = getGameBySocketId(socketId);
   if (game) {
+    if (!game.isPlayerNow(socketId)) {
+      return false;
+    }
     game.lockDice(lockedDice);
 
     let values = game.rollDice();
@@ -208,6 +211,7 @@ function restartGame(socketId) {
   let game = getGameBySocketId(socketId);
   if (game) {
     if (game.restart()) {
+      io.to(game.name).emit("gameStarted");
       return true;
     }
   }
