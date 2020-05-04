@@ -113,63 +113,25 @@ client.roll([0, 1, 4]);
 client.saveResult(client.fields.THREES);
 ```
 
-Dabei werden die gesperrten Würfel `roll()` in Form ihrer Indizes in einem Array übergeben. Das Feld wird in Form eines Werts aus dem Enumerable `client.fields` übergeben. Für eine Übersicht aller möglichen Werte, siehe unten in der [Methodenübersicht](#methodenübersicht).
+Dabei werden die gesperrten Würfel `roll()` in Form ihrer Indizes in einem Array übergeben. Das Feld wird beim Speichern in Form eines Werts aus dem Enumerable `client.fields` übergeben. Für eine Übersicht aller möglichen Werte, siehe unten in der [Methodenübersicht](#methodenübersicht).
 
 #### Spielende oder Verlassen eines Spiels
 
-### ClientSeite:
+Nach Spielende kann ein Spiel neu gestartet werden. Dabei verbleiben alle Spieler im Spiel, die Würfel und alle gespeicherten Felder werden zurückgesetzt:
 
-new Connection(_username_, _password_)
+```javascript
+client.restartGame();
+```
 
-    _username_: Name im Spiel
-    _password:_ Allgemeines Server Passwort, um überhaupt verbunden zu werden
+Ein Spiel kann zu jedem Zeitpunkt durch Aufrufen der `leaveGame()`-Methode verlassen werden:
 
-connection.roll(_lockedDice_)
+```javascript
+client.leaveGame();
+```
 
-    _lockedDice_: Array mit den Indizes von 0-4 mit den gelockten Würfel
+Dabei wird das zugehörige Spielerobjekt gelöscht und der nächste Spieler kommt automatisch an die Reihe. Selbiges gilt, wenn die Verbindung zum Server durch einen Reload oder fehlende Internetverbindung unterbrochen wird.
 
-    	Erfolg: diceRolled Event wird ausgerufen mit den values und an alle RaumTeilnehmer versandt
-    	Misserfolg: Error Anzahl der Maximalen Würfe wurde erreicht throwNotAllowed wird aufgerufen
-
-connection.createGame(_name_, _size_,_complete_)
-
-    _name_: Name des Spiels
-    _size_: maximale Spielerzahl
-    _complete_: gibt an ob das Spiel alle Felder oder nur die Oberen hat. Ändert die Bonus Berechnung in CalcTotal
-
-    	Erfolg: gameCreated()
-    	Misserfolg: gameNotCreated()
-
-connection.joinGame(_name_)
-
-    _name_: Name des Spiels
-    	Erfolg: gameJoined()
-    	Misserfolg: gameNotJoined()
-
-connection.leaveGame()
-verlässt das aktuelle Spiel
-
-connection.startGame()
-entscheidet auf der Server Seite der Startspieler legt diesen auch zum ersten mal Fest PlayerNow = 0; vorher -1
-
-connection.getGamesList()
-return List aller Spiel Namen
-
-connection.saveScore(_scoreField_)
-_scoreField_: Der Name des Scorefeldes in dem der Score gespeichert werden soll
-Erfolg: sendet an alle Spieler ein updatePlayer Event und der score wird eingetragen
-Misserfolg: Fehler: Man ist selbst nicht dran oder das scoreField ist falsch
-
-### Events
-
-connection.updatePlayers(_players_, _playerNow_)
-
-    _players_: Array mit den Spielern {name: name, score: Object mit den Scores}
-    _playerNow_: Index des aktuellen Zug Spielers
-
-connection.diceRolled(_values_)
-
-    _values_: Array mit den gewürfelten Werten in der Rheinfolge, wie sie gewürfelt wurden
+Verlassen alle Spieler ein Spiel, wird dieses gelöscht.
 
 ## Methodenübersicht
 
@@ -231,6 +193,15 @@ Nachfolgend sind noch einmal alle Methoden von `Client` aufgeführt:
 Nachfolgend sind noch einmal alle Eventhandler von `Client` aufgeführt:
 
 // Eventhandler einfügen!
+
+connection.updatePlayers(_players_, _playerNow_)
+
+    _players_: Array mit den Spielern {name: name, score: Object mit den Scores}
+    _playerNow_: Index des aktuellen Zug Spielers
+
+connection.diceRolled(_values_)
+
+    _values_: Array mit den gewürfelten Werten in der Rheinfolge, wie sie gewürfelt wurden
 
 ## Exception Handling
 
