@@ -6,12 +6,14 @@ Genereal server setup and communication.
 import Game from "./game.mjs";
 import express from "express";
 import socket from "socket.io";
-
+import crypto from "crypto";
 // setup
 
 let app = express();
 const port = process.env.PORT || 3000;
 const password = process.env.PASSWORD || "ILoveIMD2020";
+let pwHash = crypto.createHash("md5").update(password).digest("hex");
+
 let server = app.listen(port);
 console.log("Server listening on port " + port + " ...");
 
@@ -27,7 +29,7 @@ io.sockets.on("connection", newConnection);
 function newConnection(socket) {
   console.log("New player with id " + socket.id + " connected.");
   //console.log(socket.handshake.query);
-  if (password === socket.handshake.query.pw) {
+  if (pwHash === socket.handshake.query.pw) {
     SOCKET_LIST[socket.id] = socket;
     socket.name = socket.handshake.query.name;
     console.log(
