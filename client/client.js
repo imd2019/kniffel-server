@@ -14,9 +14,7 @@ export default class Client {
     });
 
     this.socket.on("diceRolled", this.diceRolled);
-    this.socket.on("updatePlayers", (data) => {
-      this.updatePlayers(data.players, data.playerNow);
-    });
+    this.socket.on("updatePlayers", this.updatePlayers);
     this.socket.on("playerLeft", this.playerLeft);
     this.socket.on("playerJoined", this.playerJoined);
   }
@@ -114,8 +112,9 @@ export default class Client {
     this.socket.emit("restartGame");
   }
 
-  updatePlayers(players, playerNow) {
-    console.log(players);
+  updatePlayers(data) {
+    console.log(data.players);
+    console.log(data.playerNow);
   }
 
   playerJoined(player) {
