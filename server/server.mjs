@@ -141,7 +141,7 @@ function joinGame(gameName, socket) {
 function leaveGame(socketId) {
   let game = getGameBySocketId(socketId);
   if (game) {
-    let player = game.players[game.getPlayerIndex(socketId)].name;
+    let player = game.players[game.getPlayerIndex(socketId)].getName();
     if (game.leave(socketId)) {
       console.log("Game " + game.name + " deleted. All players left.");
       delete games[game.name];
