@@ -9,9 +9,7 @@ export default class Connection {
     this.password = password;
     this.socket = this.connect();
 
-    this.socket.on("diceRolled", (values) => {
-      this.diceRolled(values);
-    });
+    this.socket.on("diceRolled", this.diceRolled);
 
     this.socket.on("updatePlayers", (data) => {
       this.updatePlayers(data.players, data.playerNow);

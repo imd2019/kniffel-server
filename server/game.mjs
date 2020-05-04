@@ -159,7 +159,7 @@ export default class Game {
         return this.addNumOfAKind(4);
       case "fives":
         return this.addNumOfAKind(5);
-      case "sixed":
+      case "sixes":
         return this.addNumOfAKind(6);
       case "threeOfAKind":
         return this.threeOfAKind();
