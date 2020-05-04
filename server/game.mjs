@@ -61,6 +61,13 @@ export default class Game {
     return -1;
   }
 
+  isStarted() {
+    if (this.playerNow >= 0) {
+      return true;
+    }
+    return false;
+  }
+
   isPlayerNow(socketId) {
     return socketId === this.players[this.playerNow].socketId;
   }
@@ -92,7 +99,6 @@ export default class Game {
 
   rollDice() {
     if (this.throws >= 3) return "304";
-    if (this.playerNow < 0) return "302";
     for (let element of this.dice) {
       element.roll();
     }
@@ -109,7 +115,6 @@ export default class Game {
   }
 
   saveScore(selectedField) {
-    if (this.playerNow < 0) return "502";
     let plNow = this.players[this.playerNow];
     if (plNow.scores[selectedField] != null) return "504";
     if (!plNow.scores.hasOwnProperty(selectedField)) return "505";
@@ -121,9 +126,8 @@ export default class Game {
   }
 
   nextTurn() {
-    if (this.playerNow < this.players.length) {
-      this.playerNow++;
-    } else {
+    this.playerNow++;
+    if (this.playerNow >= this.players.length) {
       this.playerNow = 0;
     }
 

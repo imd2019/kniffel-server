@@ -45,7 +45,6 @@ export default class Client {
       "601": "You could not restart the game. You are not in any game.",
       "701": "You could not leave a game. You are not in any game",
     };
-    console.log(this.errorList.hasOwnProperty("505"));
   }
 
   connect(username, password, url = "localhost:3000/") {

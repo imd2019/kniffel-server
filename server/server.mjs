@@ -57,8 +57,8 @@ function newConnection(socket) {
     callback(joinGame(gameName, socket));
   });
 
-  socket.on("leaveGame", () => {
-    leaveGame(socket.id);
+  socket.on("leaveGame", (callback) => {
+    callback(leaveGame(socket.id));
   });
 
   socket.on("startGame", (callback) => {
@@ -73,8 +73,8 @@ function newConnection(socket) {
     callback(saveResult(selectedField, socket.id));
   });
 
-  socket.on("restartGame", () => {
-    restartGame(socket.id);
+  socket.on("restartGame", (callback) => {
+    callback(restartGame(socket.id));
   });
 
   socket.on("disconnect", () => {
@@ -169,11 +169,11 @@ function startGame(socketId) {
 function roll(lockedDice, socketId) {
   let game = getGameBySocketId(socketId);
   if (!game) return "301";
+  if (!game.isStarted()) return "302";
   if (!game.isPlayerNow(socketId)) return "303";
 
   game.lockDice(lockedDice);
   let values = game.rollDice();
-  if (values === "302") return "302";
   if (values === "304") return "304";
   io.to(game.name).emit("diceRolled", values);
   return true;
@@ -182,9 +182,9 @@ function roll(lockedDice, socketId) {
 function saveResult(selectedField, socketId) {
   let game = getGameBySocketId(socketId);
   if (!game) return "501";
+  if (!game.isStarted()) return "502";
   if (!game.isPlayerNow(socketId)) return "503";
   let isScoreSafe = game.saveScore(selectedField);
-  if (isScoreSafe === "502") return "502";
   if (isScoreSafe === "504") return "504";
   if (isScoreSafe === "505") return "505";
 
