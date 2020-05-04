@@ -1,6 +1,6 @@
-import Connection from "./connection.js";
+import Client from "./client.js";
 
-let connection = new Connection("test", "ILoveIMD2020");
+let connection = new Client("test", "ILoveIMD2020");
 
 connection.createGame("Partykammer", 1, true);
 connection.createGame("Paaaartyyyyy!!!", 1, true);

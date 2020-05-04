@@ -3,11 +3,9 @@ Connection to server.
 (c)2020 Florian Beck and Leander Schmidt.
 */
 
-export default class Connection {
-  constructor(username, password) {
-    this.username = username;
-    this.password = password;
-    this.socket = this.connect();
+export default class Client {
+  constructor() {
+    this.socket;
 
     this.socket.on("diceRolled", this.diceRolled);
 
@@ -16,17 +14,14 @@ export default class Connection {
     });
   }
 
-  connect() {
-    return io.connect("localhost:3000/", {
+  connect(url = "localhost:3000/", username, password) {
+    this.socket = io.connect(url, {
       query: "name=" + this.username + "&pw=" + this.password,
     });
   }
 
   getGamesList() {
-    let con = this;
-    this.socket.emit("getGames", function (games) {
-      con.gamesListReturned(games);
-    });
+    this.socket.emit("getGames", this.gamesListReturned);
   }
 
   gamesListReturned(games) {

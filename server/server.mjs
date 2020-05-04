@@ -83,7 +83,11 @@ function newConnection(socket) {
 function getGames() {
   let gamesList = [];
   for (let index in games) {
-    gamesList.push(index);
+    gamesList.push({
+      name: index,
+      size: games[index].size,
+      playerCount: games[index].players.length,
+    });
   }
   return gamesList;
 }
