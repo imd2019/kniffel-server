@@ -6,6 +6,23 @@ Connection to server.
 export default class Client {
   constructor() {
     this.socket;
+
+    this.fields = {
+      ONES: "ones",
+      TWOS: "twos",
+      THREES: "threes",
+      FOURS: "fours",
+      FIVES: "fives",
+      SIXES: "sixes",
+      THREEOFAKIND: "threeOfAKind",
+      FOUROFAKIND: "fourOfAKind",
+      FULLHOUSE: "fullHouse",
+      SMALLSTRAIGHT: "smallStraight",
+      LARGESTRAIGHT: "largeStraight",
+      KNIFFEL: "kniffel",
+      CHANCE: "chance",
+    };
+    Object.freeze(this.fields);
   }
 
   connect(username, password, url = "localhost:3000/") {

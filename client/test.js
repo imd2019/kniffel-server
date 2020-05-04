@@ -11,4 +11,4 @@ client.roll();
 client.roll([1, 4]);
 client.roll();
 client.roll();
-client.saveResult("ones");
+client.saveResult(client.fields.ONES);
