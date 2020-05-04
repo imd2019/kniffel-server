@@ -25,26 +25,27 @@ export default class Client {
     Object.freeze(this.fields);
     this.errorList = {
       "101": "You cannot create a game. You are already in a game.",
-      "102": "A Game with this name already exists.",
-      "103": "The size of your game is to small.",
-      "201": "You cannot join a game.You are already in a game.",
-      "202": "The game with the given name does not exsits.",
-      "203": "This game is already full.",
+      "102": "A game with this name exists already.",
+      "103": "A game needs at least one player.",
+      "201": "You cannot join a game. You are already in a game.",
+      "202": "A game with this name does not exist.",
+      "203": "This game is full.",
       "204": "This game already started.",
-      "301": "You cannot roll the dice. You are not in the game.",
-      "302": "You cannot roll the dice. Game did not start.",
-      "303": "You cannot roll the dice. Game did not start.",
+      "301": "You cannot roll. You are not in this game.",
+      "302": "You cannot roll. The game did not start yet.",
+      "303": "You cannot roll. It is not your turn.",
       "304": "You already rolled 3 times.",
-      "401": "Game could not be started. You are not in a game.",
-      "402": "Game already started",
-      "501": "You cannot save the score. You are not in the game.",
-      "502": "You cannot save the score. Game did not start.",
+      "401": "The game could not be started. You are not in any game.",
+      "402": "This game has already been started.",
+      "501": "You cannot save the score. You are not in this game.",
+      "502": "You cannot save the score. The game did not start yet.",
       "503": "You cannot save the score. It is not your turn.",
-      "504": "Score could not be saved.There is already score in this field.",
-      "505": "Score could not be saved. Field does not exists.",
+      "504": "The score could not be saved. The field is not empty.",
+      "505": "The score could not be saved. The field does not exist.",
       "601": "You could not restart the game. You are not in any game.",
-      "701": "You could not leave a game. You are not in any game",
+      "701": "You could not leave the game. You are not in any game.",
     };
+    Object.freeze(this.errorList);
   }
 
   connect(username, password, url = "localhost:3000/") {
