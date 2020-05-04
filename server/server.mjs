@@ -117,7 +117,8 @@ function joinGame(gameName, socket) {
   if (
     !getGameBySocketId(socket.id) &&
     gameExists(gameName) &&
-    games[gameName].players.length < games[gameName].size
+    games[gameName].players.length < games[gameName].size &&
+    games[gameName].playerNow < 0
   ) {
     if (games[gameName].getPlayerIndex(socket.id) >= 0) {
       console.log("Player is already in this game.");
