@@ -3,7 +3,7 @@ import Client from "./client.js";
 let client = new Client("test", "ILoveIMD2020");
 
 client.connect("Tester", "ILoveIMD2020");
-client.createGame("Partykammer", 2, true);
+client.createGame("Partykammer", 4, true);
 client.joinGame("Partykammer");
 client.getGamesList();
 client.startGame();

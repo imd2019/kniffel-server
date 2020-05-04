@@ -167,6 +167,7 @@ function startGame(socketId) {
   let game = getGameBySocketId(socketId);
   if (game) {
     if (game.start()) {
+      io.to(game.name).emit("gameStarted");
       return true;
     }
   }
