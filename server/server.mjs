@@ -110,8 +110,6 @@ function createGame(gameInfos, socket) {
   game.join(socket.id);
   games[game.name] = game;
   return game.name;
-  // console.log("Game exists already or size is to small."); // EVTL noch zu einem Event für die Clientseite hinzufügen
-  // return false;
 }
 
 function joinGame(gameName, socket) {
@@ -120,10 +118,6 @@ function joinGame(gameName, socket) {
   if (games[gameName].players.length >= games[gameName].size) return "203";
   if (games[gameName].playerNow >= 0) return "204";
 
-  // if (games[gameName].getPlayerIndex(socket.id) >= 0) {
-  //   console.log("Player is already in this game.");        ???????????????????
-  //   return false;
-  // }
   let game = games[gameName];
   socket.join(gameName, function () {
     console.log("Player " + socket.id + " joined room " + gameName + ".");
