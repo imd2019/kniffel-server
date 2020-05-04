@@ -72,6 +72,7 @@ Game:
 - players : Array
 - dice: Array
 - playerNow: Index in players
+
   - saveScore(scoreID): return true/false
   - getAllPlayerScore(): return Array 2D
   - addPlayer(player)
@@ -82,21 +83,44 @@ Game:
     Prüfmethoden...
 
     Dice:
+
 - value
 
   - roll()
 
 ## Dokumentation
 
-###ClientSeite: 
-	connection.roll(lockedDice) 
-		>lockedDice: Array mit den Indizes von 0-4 mit den gelockten Würfel
-		return: Array mit den gewürfelten Werten 
-	
-	connection.startGame()
-		entscheidet auf der Server Seite der Startspieler legt diesen auch zum ersten mal Fest PlayerNow = 0; vorher -1 
+(
+###ClientSeite:
 
-	connection.updatePlayers event
-		bekommt ein Objekt mit einer players Liste und einem playerNow index zu dieser
+new Connection(_username_, _password_)
+	_username_: Name im Spiel
+	_password:_ Allgemeines Server Passwort, um überhaupt verbunden zu werden
 
-	 
+connection.roll(_lockedDice_)
+	_lockedDice_: Array mit den Indizes von 0-4 mit den gelockten Würfel
+		return: Array mit den gewürfelten Werten
+
+connection.createGame(_name_, _size_)
+	_name_: Name des Spiels
+	_size_: maximale Spielerzahl
+		Erfolg: gameCreated();
+		Misserfolg: gameNotCreated())
+
+connection.joinGame(_name_)
+	_name_: Name des Spiels
+		Erfolg: gameJoined();
+		Misserfolg: gameNotJoined())
+
+
+connection.startGame()
+	entscheidet auf der Server Seite der Startspieler legt diesen auch zum ersten mal Fest PlayerNow = 0; vorher -1
+
+###Events
+
+connection.updatePlayers(_players_, _playerNow_)
+	_players_: Array mit den Spielern {name: name, score: Object mit den Scores}		
+	_playerNow_: Index des aktuellen Zug Spielers
+
+connection.diceRolled(_values_)
+	_values_: Array mit den gewürfelten Werten in der Rheinfolge, wie sie gewürfelt wurden
