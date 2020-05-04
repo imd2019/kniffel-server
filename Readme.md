@@ -1,5 +1,8 @@
 # Kniffel-Server
 
+Studiengang Interactive Media Design, Sommersemester 2020.
+Leander Schmidt, Florian Beck, Garrit Schaap.
+
 ## Spielablauf
 
 Um dem Server beizutreten, muss ein persönlicher Nutzername angelegt werden. Nutzernamen können mehrfach vorkommen, allerdings empfiehlt es sich der Unterscheidbarkeit halber, einen möglichst eindeutigen und einmaligen Nutzernamen zu wählen.
@@ -56,8 +59,10 @@ Außerdem muss die Einbindung in den `head`-Bereich der HTML-Datei erfolgen:
 Die Verbindung zum Server wird durch Aufruf der Methode `client.connect()` hergestellt. Ein Aufruf kann wie folgt aussehen:
 
 ```javascript
-client.connect("Tester", "ILoveIMD2020", "https://www.beispielserver.de/");
+client.connect("user", "ILoveIMD2020", "https://www.beispielserver.de/");
 ```
+
+## Verwenden der Methoden und Eventhandler
 
 ### Spiel anlegen oder vorhandenem Spiel beitreten
 
@@ -84,6 +89,87 @@ client.createGame("IMD-Club", 5, true);
 
 wobei man den Namen des Spiels und die maximale Spielerzahl übergibt.
 Der dritte Parameter legt fest, ob ein einfaches (`false`) oder vollständiges (`true`) Kniffel-Spiel erstellt werden soll.
+
+### Spielablauf
+
+#### Spielstart
+
+Ein Spiel kann gestartet werden, sobald ihm Spieler beigetreten sind. Hierzu wird die Methode `startGame()` aufgerufen:
+
+```javascript
+client.startGame();
+```
+
+Es wird dabei stets das Spiel gestartet, dem der Spieler beigetreten ist, der die Methode aufruft.
+
+#### Spielzüge
+
+Ein Spielzug besteht aus bis zu dreimal Würfeln, ggf. Sperren von Würfeln, Wählen eines Feldes und Speichern. Nachfolgend ist ein beispielhafter Spielzug dargestellt.
+
+```javascript
+client.roll();
+client.roll([1, 4]);
+client.roll([0, 1, 4]);
+client.saveResult(client.fields.THREES);
+```
+
+Dabei werden die gesperrten Würfel `roll()` in Form ihrer Indizes in einem Array übergeben. Das Feld wird in Form eines Werts aus dem Enumerable `client.fields` übergeben. Für eine Übersicht aller möglichen Werte, siehe unten in der [Methodenübersicht](#methodenübersicht).
+
+#### Spielende oder Verlassen eines Spiels
+
+### ClientSeite:
+
+new Connection(_username_, _password_)
+
+    _username_: Name im Spiel
+    _password:_ Allgemeines Server Passwort, um überhaupt verbunden zu werden
+
+connection.roll(_lockedDice_)
+
+    _lockedDice_: Array mit den Indizes von 0-4 mit den gelockten Würfel
+
+    	Erfolg: diceRolled Event wird ausgerufen mit den values und an alle RaumTeilnehmer versandt
+    	Misserfolg: Error Anzahl der Maximalen Würfe wurde erreicht throwNotAllowed wird aufgerufen
+
+connection.createGame(_name_, _size_,_complete_)
+
+    _name_: Name des Spiels
+    _size_: maximale Spielerzahl
+    _complete_: gibt an ob das Spiel alle Felder oder nur die Oberen hat. Ändert die Bonus Berechnung in CalcTotal
+
+    	Erfolg: gameCreated()
+    	Misserfolg: gameNotCreated()
+
+connection.joinGame(_name_)
+
+    _name_: Name des Spiels
+    	Erfolg: gameJoined()
+    	Misserfolg: gameNotJoined()
+
+connection.leaveGame()
+verlässt das aktuelle Spiel
+
+connection.startGame()
+entscheidet auf der Server Seite der Startspieler legt diesen auch zum ersten mal Fest PlayerNow = 0; vorher -1
+
+connection.getGamesList()
+return List aller Spiel Namen
+
+connection.saveScore(_scoreField_)
+_scoreField_: Der Name des Scorefeldes in dem der Score gespeichert werden soll
+Erfolg: sendet an alle Spieler ein updatePlayer Event und der score wird eingetragen
+Misserfolg: Fehler: Man ist selbst nicht dran oder das scoreField ist falsch
+
+### Events
+
+connection.updatePlayers(_players_, _playerNow_)
+
+    _players_: Array mit den Spielern {name: name, score: Object mit den Scores}
+    _playerNow_: Index des aktuellen Zug Spielers
+
+connection.diceRolled(_values_)
+
+    _values_: Array mit den gewürfelten Werten in der Rheinfolge, wie sie gewürfelt wurden
 
 ## Methodenübersicht
 
@@ -192,153 +278,3 @@ Nachfolgend ist eine Liste aller möglichen Fehlermeldungen auf Client-Seite dar
 - 700 Fehler beim Verlassen (leaveGame)
 
   - 701: You could not leave the game. You are not in any game.
-
-# Kniffel-Server für IMD SS 2020
-
-## General
-
-- game types?
-  - complete (all rules)
-  - simple (only first block)
-
-## Server
-
-### Client-side tasks
-
-#### join server
-
-- parameters: name, password
-- What if connection fails?
-
-#### create game
-
-- parameters: name, amount of players
-
-#### join game
-
-### Server-side tasks
-
-#### lobby
-
-- games overview
-
-#### games
-
-- create room in socket.io
-  - Name vergeben?
-- determine random start player
-- calculate results
-- identify winner (notwendig?)
-
-#### general
-
-- save highscore?
-
-## Library
-
-- Klasse für Serverkommunikation
-
-- Handler
-  - für Datenversand (z.B. `server.rollDice()`)
-  - für Datenempfang (z.B. `server.diceRolled()`)
-
-## Structure
-
-### Classes
-
-Server:
-games: Array
-password: const
-SOCKET_LIST: Objekt: socketId, socket
-
-Player:
-
-- name : String
-- id (socketId?)
-- score: assoziativ array ?
-
-  - setScore(scoreId, score)
-  - getScore(scoreId): return score
-  - calcBonus(): return bonus
-  - calcTotal(): return totalScore
-
-Game:
-
-- players : Array
-- dice: Array
-- playerNow: Index in players
-
-  - saveScore(scoreID): return true/false
-  - getAllPlayerScore(): return Array 2D
-  - addPlayer(player)
-  - rollDice() Da müssen wir schauen wie wir das mit gesperrten Würfeln machen!
-  - nextPlayer()
-  - reset ()
-  - (winner())
-    Prüfmethoden...
-
-    Dice:
-
-- value
-
-  - roll()
-
-## ToDo
-
-    reset Game
-
-## Dokumentation
-
-### ClientSeite:
-
-new Connection(_username_, _password_)
-
-    _username_: Name im Spiel
-    _password:_ Allgemeines Server Passwort, um überhaupt verbunden zu werden
-
-connection.roll(_lockedDice_)
-
-    _lockedDice_: Array mit den Indizes von 0-4 mit den gelockten Würfel
-
-    	Erfolg: diceRolled Event wird ausgerufen mit den values und an alle RaumTeilnehmer versandt
-    	Misserfolg: Error Anzahl der Maximalen Würfe wurde erreicht throwNotAllowed wird aufgerufen
-
-connection.createGame(_name_, _size_,_complete_)
-
-    _name_: Name des Spiels
-    _size_: maximale Spielerzahl
-    _complete_: gibt an ob das Spiel alle Felder oder nur die Oberen hat. Ändert die Bonus Berechnung in CalcTotal
-
-    	Erfolg: gameCreated()
-    	Misserfolg: gameNotCreated()
-
-connection.joinGame(_name_)
-
-    _name_: Name des Spiels
-    	Erfolg: gameJoined()
-    	Misserfolg: gameNotJoined()
-
-connection.leaveGame()
-verlässt das aktuelle Spiel
-
-connection.startGame()
-entscheidet auf der Server Seite der Startspieler legt diesen auch zum ersten mal Fest PlayerNow = 0; vorher -1
-
-connection.getGamesList()
-return List aller Spiel Namen
-
-connection.saveScore(_scoreField_)
-_scoreField_: Der Name des Scorefeldes in dem der Score gespeichert werden soll
-Erfolg: sendet an alle Spieler ein updatePlayer Event und der score wird eingetragen
-Misserfolg: Fehler: Man ist selbst nicht dran oder das scoreField ist falsch
-
-### Events
-
-connection.updatePlayers(_players_, _playerNow_)
-
-    _players_: Array mit den Spielern {name: name, score: Object mit den Scores}
-    _playerNow_: Index des aktuellen Zug Spielers
-
-connection.diceRolled(_values_)
-
-    _values_: Array mit den gewürfelten Werten in der Rheinfolge, wie sie gewürfelt wurden
