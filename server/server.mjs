@@ -97,62 +97,52 @@ function getGames() {
 }
 
 function createGame(gameInfos, socket) {
-  if (
-    !getGameBySocketId(socket.id) &&
-    !gameExists(gameInfos.name) &&
-    gameInfos.size > 0
-  ) {
-    socket.join(gameInfos.name, function () {
-      console.log(
-        "Player " + socket.id + " created room " + gameInfos.name + "."
-      );
-    });
-    let game = new Game(gameInfos.name, gameInfos.size, gameInfos.complete);
-    game.join(socket.id);
-    games[game.name] = game;
-    return game.name;
-  }
-  console.log("Game exists already or size is to small."); // EVTL noch zu einem Event für die Clientseite hinzufügen
-  return false;
+  if (getGameBySocketId(socket.id)) return "101";
+  if (gameExists(gameInfos.name)) return "102";
+  if (gameInfos.size < 1) return "103";
+
+  socket.join(gameInfos.name, function () {
+    console.log(
+      "Player " + socket.id + " created room " + gameInfos.name + "."
+    );
+  });
+  let game = new Game(gameInfos.name, gameInfos.size, gameInfos.complete);
+  game.join(socket.id);
+  games[game.name] = game;
+  return game.name;
+  // console.log("Game exists already or size is to small."); // EVTL noch zu einem Event für die Clientseite hinzufügen
+  // return false;
 }
 
 function joinGame(gameName, socket) {
-  if (
-    !getGameBySocketId(socket.id) &&
-    gameExists(gameName) &&
-    games[gameName].players.length < games[gameName].size &&
-    games[gameName].playerNow < 0
-  ) {
-    if (games[gameName].getPlayerIndex(socket.id) >= 0) {
-      console.log("Player is already in this game.");
-      return false;
-    }
-    let game = games[gameName];
-    socket.join(gameName, function () {
-      console.log("Player " + socket.id + " joined room " + gameName + ".");
-    });
-    game.join(socket.id);
-    io.to(game.name).emit("playerJoined", socket.name);
-    return gameName;
-  }
-  console.log(
-    "Player " +
-      socket.id +
-      " tried to join non-existent game or the game is full."
-  );
-  return false;
+  if (getGameBySocketId(socket.id)) return "201";
+  if (!gameExists(gameName)) return "202";
+  if (games[gameName].players.length >= games[gameName].size) return "203";
+  if (games[gameName].playerNow >= 0) return "204";
+
+  // if (games[gameName].getPlayerIndex(socket.id) >= 0) {
+  //   console.log("Player is already in this game.");        ???????????????????
+  //   return false;
+  // }
+  let game = games[gameName];
+  socket.join(gameName, function () {
+    console.log("Player " + socket.id + " joined room " + gameName + ".");
+  });
+  game.join(socket.id);
+  io.to(game.name).emit("playerJoined", socket.name);
+  return gameName;
 }
 
 function leaveGame(socketId) {
   let game = getGameBySocketId(socketId);
-  if (game) {
-    let player = game.players[game.getPlayerIndex(socketId)].getName();
-    if (game.leave(socketId)) {
-      console.log("Game " + game.name + " deleted. All players left.");
-      delete games[game.name];
-    } else {
-      io.to(game.name).emit("playerLeft", player);
-    }
+  if (!game) return "701";
+
+  let player = game.players[game.getPlayerIndex(socketId)].getName();
+  if (game.leave(socketId)) {
+    console.log("Game " + game.name + " deleted. All players left.");
+    delete games[game.name];
+  } else {
+    io.to(game.name).emit("playerLeft", player);
   }
 }
 
@@ -169,51 +159,46 @@ function getGameBySocketId(socketId) {
 
 function startGame(socketId) {
   let game = getGameBySocketId(socketId);
-  if (game) {
-    if (game.start()) {
-      io.to(game.name).emit("gameStarted");
-      return true;
-    }
-  }
-  return false;
+  if (!game) return "401";
+  if (!game.start()) return "402";
+
+  io.to(game.name).emit("gameStarted");
+  return true;
 }
 
 function roll(lockedDice, socketId) {
   let game = getGameBySocketId(socketId);
-  if (game) {
-    if (!game.isPlayerNow(socketId)) {
-      return false;
-    }
-    game.lockDice(lockedDice);
+  if (!game) return "301";
+  if (!game.isPlayerNow(socketId)) return "303";
 
-    let values = game.rollDice();
-    if (values) {
-      io.to(game.name).emit("diceRolled", values);
-      return true;
-    }
-  }
-  return false;
+  game.lockDice(lockedDice);
+  let values = game.rollDice();
+  if (values === "302") return "302";
+  if (values === "304") return "304";
+  io.to(game.name).emit("diceRolled", values);
+  return true;
 }
 
 function saveResult(selectedField, socketId) {
   let game = getGameBySocketId(socketId);
-  if (game) {
-    if (game.isPlayerNow(socketId)) {
-      if (!game.saveScore(selectedField)) return false;
-      updatePlayers(socketId);
-      return true;
-    }
-  }
-  return false;
+  if (!game) return "501";
+  if (!game.isPlayerNow(socketId)) return "503";
+  let isScoreSafe = game.saveScore(selectedField);
+  if (isScoreSafe === "502") return "502";
+  if (isScoreSafe === "504") return "504";
+  if (isScoreSafe === "505") return "505";
+
+  updatePlayers(socketId);
+  return true;
 }
 
 function restartGame(socketId) {
   let game = getGameBySocketId(socketId);
-  if (game) {
-    if (game.restart()) {
-      io.to(game.name).emit("gameStarted");
-      return true;
-    }
+  if (!game) return "601";
+
+  if (game.restart()) {
+    io.to(game.name).emit("gameStarted");
+    return true;
   }
   return false;
 }

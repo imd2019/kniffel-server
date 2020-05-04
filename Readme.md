@@ -180,15 +180,21 @@ errorCodes:
 	  "203": "This game is already full."
 	  "204": "This game already started."
 	300 roll:
-	  "301": "You cannot roll the dice. It is not your turn."
-	  "302": "You cannot roll the dice". Game did not start.
-	  "303": "You already rolled 3 times."
+	  "301": "You cannot roll the dice. You are not in the game."
+	  "302": "You cannot roll the dice. Game did not start."
+	  "303": "You cannot roll the dice. It is not your turn."
+	  "304": "You already rolled 3 times."
 
 	400 startGame
 	  "401": "Game could not be started. You are not in a game."
 	  "402": "Game already started"
 	500 saveResults
-	  "501": "You cannot save the score. It is not your turn."
+	  "501": "You cannot save the score. You are not in the game."
 	  "502": "You cannot save the score. Game did not start."
-	  "503": "Score could not be saved.There is already score in this field."
-	  "504": "Score could not be saved. Field does not exists."
+	  "503": "You cannot save the score. It is not your turn."
+	  "504": "Score could not be saved.There is already score in this field."
+	  "505": "Score could not be saved. Field does not exists."
+	600 restartGame
+	  "601": "You could not restart the game. You are not in any game."
+	700 leaveGame
+	  "701": "You could not leave a game. You are not in any game"

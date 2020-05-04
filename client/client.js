@@ -23,6 +23,29 @@ export default class Client {
       CHANCE: "chance",
     };
     Object.freeze(this.fields);
+    this.errorList = {
+      "101": "You cannot create a game. You are already in a game.",
+      "102": "A Game with this name already exists.",
+      "103": "The size of your game is to small.",
+      "201": "You cannot join a game.You are already in a game.",
+      "202": "The game with the given name does not exsits.",
+      "203": "This game is already full.",
+      "204": "This game already started.",
+      "301": "You cannot roll the dice. You are not in the game.",
+      "302": "You cannot roll the dice. Game did not start.",
+      "303": "You cannot roll the dice. Game did not start.",
+      "304": "You already rolled 3 times.",
+      "401": "Game could not be started. You are not in a game.",
+      "402": "Game already started",
+      "501": "You cannot save the score. You are not in the game.",
+      "502": "You cannot save the score. Game did not start.",
+      "503": "You cannot save the score. It is not your turn.",
+      "504": "Score could not be saved.There is already score in this field.",
+      "505": "Score could not be saved. Field does not exists.",
+      "601": "You could not restart the game. You are not in any game.",
+      "701": "You could not leave a game. You are not in any game",
+    };
+    console.log(this.errorList.hasOwnProperty("505"));
   }
 
   connect(username, password, url = "localhost:3000/") {
@@ -50,12 +73,12 @@ export default class Client {
     let con = this;
     let gameInfos = { name: name, size: size, complete: complete };
     this.socket.emit("createGame", gameInfos, function (game) {
-      if (game) {
+      if (con.errorList.hasOwnProperty(game)) {
+        console.log("Error " + game + ": " + con.errorList[game]);
+        con.gameNotCreated();
+      } else {
         console.log("Game " + game + " created.");
         con.gameCreated();
-      } else {
-        console.log("Game exists already.");
-        con.gameNotCreated();
       }
     });
   }
@@ -67,14 +90,12 @@ export default class Client {
   joinGame(name) {
     let con = this;
     this.socket.emit("joinGame", name, function (game) {
-      if (game) {
+      if (con.errorList.hasOwnProperty(game)) {
+        console.log("Error " + game + ": " + con.errorList[game]);
+        con.gameNotJoined();
+      } else {
         console.log("Game " + game + "joined.");
         con.gameJoined();
-      } else {
-        console.log(
-          "Game does not exist, you are already in a game or player has already joined."
-        );
-        con.gameNotJoined();
       }
     });
   }
@@ -84,14 +105,19 @@ export default class Client {
   gameNotJoined() {}
 
   leaveGame() {
-    this.socket.emit("leaveGame");
+    let con = this;
+    this.socket.emit("leaveGame", function (returnValue) {
+      if (con.errorList.hasOwnProperty(returnValue)) {
+        console.log("Error " + returnValue + ": " + con.errorList[returnValue]);
+      }
+    });
   }
 
   startGame() {
     let con = this;
     this.socket.emit("startGame", function (returnValue) {
-      if (!returnValue) {
-        console.log("Game could not be started.");
+      if (con.errorList.hasOwnProperty(returnValue)) {
+        console.log("Error " + returnValue + ": " + con.errorList[returnValue]);
       }
     });
   }
@@ -103,8 +129,8 @@ export default class Client {
   roll(lockedDice = []) {
     let con = this;
     this.socket.emit("roll", lockedDice, function (returnValue) {
-      if (!returnValue) {
-        console.log("Maximum throws reached.");
+      if (con.errorList.hasOwnProperty(returnValue)) {
+        console.log("Error " + returnValue + ": " + con.errorList[returnValue]);
         con.rollNotAllowed();
       }
     });
@@ -119,10 +145,8 @@ export default class Client {
   saveResult(selectedField) {
     let con = this;
     this.socket.emit("saveResult", selectedField, function (returnValue) {
-      if (!returnValue) {
-        console.log(
-          "It is not your turn or result could not be safed into selected field."
-        );
+      if (con.errorList.hasOwnProperty(returnValue)) {
+        console.log("Error " + returnValue + ": " + con.errorList[returnValue]);
         con.resultNotSaved();
       }
     });
@@ -131,7 +155,12 @@ export default class Client {
   resultNotSaved() {}
 
   restartGame() {
-    this.socket.emit("restartGame");
+    let con = this;
+    this.socket.emit("restartGame", function (returnValue) {
+      if (con.errorList.hasOwnProperty(returnValue)) {
+        console.log("Error " + returnValue + ": " + con.errorList[returnValue]);
+      }
+    });
   }
 
   updatePlayers(data) {

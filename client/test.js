@@ -1,6 +1,6 @@
 import Client from "./client.js";
 
-let client = new Client("test", "ILoveIMD2020");
+let client = new Client();
 
 client.connect("Tester", "ILoveIMD2020");
 client.createGame("Partykammer", 4, true);

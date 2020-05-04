@@ -91,14 +91,13 @@ export default class Game {
   }
 
   rollDice() {
-    if (this.throws < 3 && this.playerNow >= 0) {
-      for (let element of this.dice) {
-        element.roll();
-      }
-      this.throws++;
-      return this.getDice();
+    if (this.throws >= 3) return "304";
+    if (this.playerNow < 0) return "302";
+    for (let element of this.dice) {
+      element.roll();
     }
-    return false;
+    this.throws++;
+    return this.getDice();
   }
 
   getDice() {
@@ -110,16 +109,15 @@ export default class Game {
   }
 
   saveScore(selectedField) {
-    if (this.playerNow >= 0) {
-      let plNow = this.players[this.playerNow];
-      if (plNow.scores[selectedField] === null) {
-        plNow.scores[selectedField] = this.calcScore(selectedField);
-        plNow.calcTotal(this.complete);
-        this.nextTurn();
-        return true;
-      }
-    }
-    return false;
+    if (this.playerNow < 0) return "502";
+    let plNow = this.players[this.playerNow];
+    if (plNow.scores[selectedField] != null) return "504";
+    if (!plNow.scores.hasOwnProperty(selectedField)) return "505";
+
+    plNow.scores[selectedField] = this.calcScore(selectedField);
+    plNow.calcTotal(this.complete);
+    this.nextTurn();
+    return true;
   }
 
   nextTurn() {
