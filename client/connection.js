@@ -35,9 +35,9 @@ export default class Connection {
     console.log(games);
   }
 
-  createGame(name, size) {
+  createGame(name, size, complete) {
     let con = this;
-    let gameInfos = { name: name, size: size };
+    let gameInfos = { name: name, size: size, complete: complete };
     this.socket.emit("createGame", gameInfos, function (game) {
       if (game) {
         console.log("Game " + game + " created.");
@@ -115,6 +115,10 @@ export default class Connection {
   }
 
   resultNotSaved() {}
+
+  restartGame() {
+    this.socket.emit("restartGame");
+  }
 
   updatePlayers(players, playerNow) {
     console.log(players);

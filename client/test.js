@@ -2,8 +2,8 @@ import Connection from "./connection.js";
 
 let connection = new Connection("test", "ILoveIMD2020");
 
-connection.createGame("Partykammer", 1);
-connection.createGame("Paaaartyyyyy!!!", 1);
+connection.createGame("Partykammer", 1, true);
+connection.createGame("Paaaartyyyyy!!!", 1, true);
 connection.getGamesList();
 connection.joinGame("Partykammer");
 connection.startGame();

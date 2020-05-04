@@ -7,7 +7,7 @@ import Player from "./player.mjs";
 import Dice from "./dice.mjs";
 
 export default class Game {
-  constructor(name, size) {
+  constructor(name, size, complete) {
     this.name = name;
     this.players = [];
     this.playerNow = -1;
@@ -17,6 +17,7 @@ export default class Game {
       this.dice.push(new Dice());
     }
     this.throws = 0;
+    this.complete = complete;
   }
 
   join(socketId) {
@@ -113,6 +114,7 @@ export default class Game {
       let plNow = this.players[this.playerNow];
       if (plNow.scores[selectedField] === null) {
         plNow.scores[selectedField] = this.calcScore(selectedField);
+        plNow.calcTotal(this.complete);
         this.nextTurn();
         return true;
       }
@@ -132,6 +134,14 @@ export default class Game {
     }
 
     this.throws = 0;
+  }
+
+  restart() {
+    this.nextTurn();
+    for (let element of this.players) {
+      element.reset();
+    }
+    return this.start();
   }
 
   /* Calc results from dice */

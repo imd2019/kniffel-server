@@ -69,6 +69,10 @@ function newConnection(socket) {
     callback(saveResult(selectedField, socket.id));
   });
 
+  socket.on("restartGame", () => {
+    restartGame(socket.id);
+  });
+
   socket.on("disconnect", () => {
     console.log("Player with id " + socket.id + " disconnected.");
     leaveGame(socket.id);
@@ -95,7 +99,7 @@ function createGame(gameInfos, socket) {
         "Player " + socket.id + " created room " + gameInfos.name + "."
       );
     });
-    let game = new Game(gameInfos.name, gameInfos.size);
+    let game = new Game(gameInfos.name, gameInfos.size, gameInfos.complete);
     game.join(socket.id);
     games[game.name] = game;
     //console.log(games);
@@ -181,6 +185,16 @@ function saveResult(selectedField, socketId) {
     if (game.isPlayerNow(socketId)) {
       if (!game.saveScore(selectedField)) return false;
       updatePlayers(socketId);
+      return true;
+    }
+  }
+  return false;
+}
+
+function restartGame(socketId) {
+  let game = getGameBySocketId(socketId);
+  if (game) {
+    if (game.restart()) {
       return true;
     }
   }

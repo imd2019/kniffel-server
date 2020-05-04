@@ -46,4 +46,24 @@ export default class Player {
 
     this.scores.total = result;
   }
+
+  reset() {
+    this.scores = {
+      ones: null,
+      twos: null,
+      threes: null,
+      fours: null,
+      fives: null,
+      sixes: null,
+      bonus: 0,
+      threeOfAKind: null,
+      fourOfAKind: null,
+      fullHouse: null,
+      smallStraight: null,
+      largeStraight: null,
+      kniffel: null,
+      chance: null,
+      total: 0,
+    };
+  }
 }
