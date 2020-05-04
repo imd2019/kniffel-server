@@ -3,11 +3,17 @@
 ## Spielablauf
 
 Um dem Server beizutreten, muss ein persönlicher Nutzername angelegt werden. Nutzernamen können mehrfach vorkommen, allerdings empfiehlt es sich der Unterscheidbarkeit halber, einen möglichst eindeutigen und einmaligen Nutzernamen zu wählen.
+
 Nachdem man dem Server beigetreten ist, befindet man sich zunächst in der Lobby, wo einem alle vorhandenen Spiele angezeigt werden, sowie deren Größe und wieviele Spieler bereits beigetreten sind.
+
 Hier kann man nun einem vorhandenen Spiel beitreten oder ein neues Spiel erstellen. Dabei werden der Name des Spiels sowie die maximale Spielerzahl (Größe) festgelegt und ob das Spiel den vollständigen Kniffel-Block spielen soll oder nur die obere Hälfte.
+
 Sind alle Spieler beigetreten, kann das Spiel gestartet werden. Dabei wird ein zufälliger Startspieler festgelegt. Dann wird reihum je bis zu dreimal gewürfelt, wobei jedes Mal Würfel gesperrt werden können, ein Feld gewählt und das Ergebnis darin gespeichert, sofern es noch frei ist.
+
 Verlässt ein Spieler während des Spiels den Raum, wird dies den restlichen Spielern angezeigt, der Spieler wird entfernt und es ist automatisch der nächste Spieler an der Reihe.
+
 Ist das Spiel beendet kann es, sofern gewünscht, neu gestartet werden.
+
 Verlassen alle Spieler ein Spiel, wird es gelöscht.
 
 ## Einbindung der Client-Bibliothek
