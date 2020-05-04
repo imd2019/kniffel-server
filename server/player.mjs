@@ -1,3 +1,8 @@
+/*
+Player class.
+(c)2020 Florian Beck, Leander Schmidt and Garrit Schaap.
+*/
+
 export default class Player {
   constructor(socketId) {
     this.scores = {

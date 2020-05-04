@@ -1,6 +1,6 @@
 /*
-Game class.
-(c)2020 Florian Beck and Leander Schmidt.
+Dice class.
+(c)2020 Florian Beck, Leander Schmidt and Garrit Schaap.
 */
 
 export default class Dice {

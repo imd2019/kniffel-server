@@ -1,6 +1,6 @@
 /*
 Connection to server.
-(c)2020 Florian Beck and Leander Schmidt.
+(c)2020 Florian Beck, Leander Schmidt and Garrit Schaap.
 */
 
 export default class Client {

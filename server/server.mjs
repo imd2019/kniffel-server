@@ -1,6 +1,6 @@
 /*
 Genereal server setup and communication.
-(c)2020 Florian Beck and Leander Schmidt.
+(c)2020 Florian Beck, Leander Schmidt and Garrit Schaap.
 */
 
 import Game from "./game.mjs";
