@@ -116,8 +116,8 @@ export default class Game {
 
   saveScore(selectedField) {
     let plNow = this.players[this.playerNow];
-    if (plNow.scores[selectedField] != null) return "504";
     if (!plNow.scores.hasOwnProperty(selectedField)) return "505";
+    if (plNow.scores[selectedField] != null) return "504";
     if (
       !this.complete &&
       Object.keys(plNow.scores).splice(7, 7).indexOf(selectedField) >= 0
