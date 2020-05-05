@@ -118,6 +118,11 @@ export default class Game {
     let plNow = this.players[this.playerNow];
     if (plNow.scores[selectedField] != null) return "504";
     if (!plNow.scores.hasOwnProperty(selectedField)) return "505";
+    if (
+      !this.complete &&
+      Object.keys(plNow.scores).splice(7, 7).indexOf(selectedField) >= 0
+    )
+      return "506";
 
     plNow.scores[selectedField] = this.calcScore(selectedField);
     plNow.calcTotal(this.complete);

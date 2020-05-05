@@ -92,6 +92,7 @@ function getGames() {
       name: index,
       size: games[index].size,
       playerCount: games[index].players.length,
+      complete: games[index].complete,
     });
   }
   return gamesList;
@@ -182,6 +183,7 @@ function saveResult(selectedField, socketId) {
   let isScoreSafe = game.saveScore(selectedField);
   if (isScoreSafe === "504") return "504";
   if (isScoreSafe === "505") return "505";
+  if (isScoreSafe === "506") return "506";
 
   updatePlayers(socketId);
   return true;

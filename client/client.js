@@ -44,6 +44,7 @@ export default class Client {
       "503": "You cannot save the score. It is not your turn.",
       "504": "The score could not be saved. The field is not empty.",
       "505": "The score could not be saved. The field does not exist.",
+      "506": "The game is not complete, so this score cannot be saved.",
       "601": "You could not restart the game. You are not in any game.",
       "701": "You could not leave the game. You are not in any game.",
     };
