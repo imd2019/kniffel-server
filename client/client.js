@@ -51,25 +51,6 @@ export default class Client {
     };
     Object.freeze(this.errorList);
 
-    // event management
-
-    this.eventListeners = [];
-
-    this.addEventListener = function (type, eventHandler) {
-      let listener = {};
-      listener.type = type;
-      listener.eventHandler = eventHandler;
-      this.eventListeners.push(listener);
-    };
-
-    this.dispatchEvent = function (event) {
-      console.log(event);
-      for (let index in this.eventListeners) {
-        if (event.type == this.eventListeners[index].type)
-          this.eventListeners[index].eventHandler(event);
-      }
-    };
-
     // this.addEventListener("gamesListReturned", this.onGamesListReturned);
     // this.addEventListener("gameCreated", this.onGameCreated);
     // this.addEventListener("gameNotCreated", this.onGameNotCreated);
@@ -100,11 +81,15 @@ export default class Client {
       console.log("Error 002: " + con.errorList["002"]);
     });
 
-    this.socket.on("gameStarted", this.dispatchEvent("gameStarted"));
+    this.socket.on("gameStarted", this.gameStarted);
     this.socket.on("diceRolled", this.dispatchEvent("diceAreRolled"));
     this.socket.on("updatePlayers", this.dispatchEvent("updateAllPlayers"));
     this.socket.on("playerJoined", this.dispatchEvent("playerHasJoined"));
     this.socket.on("playerLeft", this.dispatchEvent("playerHasLeft"));
+  }
+
+  gameStarted() {
+    this.dispatchEvent("gameIsStarted");
   }
 
   getGamesList() {
