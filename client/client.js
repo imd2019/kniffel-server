@@ -80,16 +80,16 @@ export default class Client extends EventClass {
       this.dispatchEvent("diceRolled", values);
     });
 
-    this.socket.on("updatePlayers", () => {
-      this.dispatchEvent("updatePlayers");
+    this.socket.on("updatePlayers", (data) => {
+      this.dispatchEvent("updatePlayers", data);
     });
 
-    this.socket.on("playerJoined", () => {
-      this.dispatchEvent("playerJoined");
+    this.socket.on("playerJoined", (player) => {
+      this.dispatchEvent("playerJoined", player);
     });
 
-    this.socket.on("playerLeft", () => {
-      this.dispatchEvent("playerLeft");
+    this.socket.on("playerLeft", (player) => {
+      this.dispatchEvent("playerLeft", player);
     });
   }
 

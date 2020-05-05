@@ -202,16 +202,110 @@ Nachfolgend sind noch einmal alle Methoden von `Client` aufgeführt:
 
 Nachfolgend sind noch einmal alle Eventhandler von `Client` aufgeführt:
 
-// Eventhandler einfügen!
+- Falsches Server-Passwort angegeben
 
-connection.updatePlayers(_players_, _playerNow_)
+  ```javascript
+  client.addEventListener("wrongPassword", function () {
+    // custom content
+  });
+  ```
 
-    _players_: Array mit den Spielern {name: name, score: Object mit den Scores}
-    _playerNow_: Index des aktuellen Zug Spielers
+- Spiel wurde erstellt
 
-connection.diceRolled(_values_)
+  ```javascript
+  client.addEventListener("gameCreated", function () {
+    // custom content
+  });
+  ```
 
-    _values_: Array mit den gewürfelten Werten in der Rheinfolge, wie sie gewürfelt wurden
+- Spiel wurde gestartet
+
+  ```javascript
+  client.addEventListener("gameStarted", function () {
+    // custom content
+  });
+  ```
+
+- Spiele-Liste wurde zurückgegeben
+
+  Die Spieleliste wird als Parameter an den EventListener übergeben. `games` ist ein Array aus Spielobjekten, die jeweils die Felder `name`, `size`, `playerCount` und `complete` enthalten.
+
+  ```javascript
+  client.addEventListener("gamesListReturned", function (games) {
+    // custom content
+  });
+  ```
+
+- Es wurde gewürfelt
+
+  Die Werte der Würfel werden Parameter an den EventListener übergeben. `values` ist ein Array aus Würfelwerten.
+
+  ```javascript
+  client.addEventListener("diceRolled", (values) => {
+    // custom content
+  });
+  ```
+
+- Spieler updaten
+
+  Dieses Event wird nach jedem Spielzug aufgerufen, um die Spielinformationen zu aktualisieren. Dabei werden die Spielerobjekte (`players`) und der aktuelle Spieler (`playerNow`) als Felder von `data` übergeben.
+
+  ```javascript
+  client.addEventListener("updatePlayers", (data) => {
+    // custom content
+  });
+  ```
+
+  Das Array `players` beinhaltet die Spielerobjekte in folgender Struktur:
+
+  - players [...]
+
+    - player {...}
+
+      - name: "name"
+      - scores {...}
+
+        - ones: null/value
+        - twos: null/value
+        - threes: null/value
+        - fours: null/value
+        - fives: null/value
+        - sixes: null/value
+        - bonus: 0/value
+        - threeOfAKind: null/value
+        - fourOfAKind: null/value
+        - fullHouse: null/value
+        - smallStraight: null/value
+        - largeStraight: null/value
+        - kniffel: null/value
+        - chance: null/value
+        - total: 0/value
+
+    - player {}
+
+    ...
+
+    Dabei sind Felder `null` wenn ihnen noch kein Wert zugewiesen wurde.
+
+- Ein Spieler ist beigetreten
+
+  Als Parameter wird der Name des Spielers als String übergeben.
+
+  ```javascript
+  client.addEventListener("playerJoined", (player) => {
+    // custom content
+  });
+  ```
+
+- Ein Spieler hat das Spiel verlassen
+
+  Als Parameter wird der Name des Spielers als String übergeben.
+
+  ```javascript
+  client.addEventListener("playerLeft", (player) => {
+    // custom content
+  });
+  ```
 
 ## Exception Handling
 
