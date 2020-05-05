@@ -10,10 +10,10 @@ export default class EventClass {
     this.eventListeners.push(listener);
   }
 
-  dispatchEvent(event) {
+  dispatchEvent(event, param) {
     for (let index in this.eventListeners) {
       if (event === this.eventListeners[index].type)
-        this.eventListeners[index].eventHandler();
+        this.eventListeners[index].eventHandler(param);
     }
   }
 }

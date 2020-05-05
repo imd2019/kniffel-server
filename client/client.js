@@ -58,7 +58,7 @@ export default class Client extends EventClass {
   connect(username, password, url = "localhost:3000/") {
     let manager = io.Manager(url);
     let con = this;
-    manager.on("connect_error", function () {
+    manager.on("connect_error", () => {
       console.log("Error 001: " + con.errorList["001"]);
     });
 
@@ -67,23 +67,36 @@ export default class Client extends EventClass {
       query: "name=" + username + "&pw=" + pwHash,
     });
 
-    this.socket.on("wrongPassword", function () {
+    this.socket.on("wrongPassword", () => {
       console.log("Error 002: " + con.errorList["002"]);
+      this.dispatchEvent("wrongPassword");
     });
 
-    this.socket.on("gameStarted", this.gameStarted);
-    this.socket.on("diceRolled", this.diceRolled);
-    this.socket.on("updatePlayers", this.updatePlayers);
-    this.socket.on("playerJoined", this.playerJoined);
-    this.socket.on("playerLeft", this.playerLeft);
+    this.socket.on("gameStarted", () => {
+      this.dispatchEvent("gameStarted");
+    });
+
+    this.socket.on("diceRolled", (values) => {
+      this.dispatchEvent("diceRolled", values);
+    });
+
+    this.socket.on("updatePlayers", () => {
+      this.dispatchEvent("updatePlayers");
+    });
+
+    this.socket.on("playerJoined", () => {
+      this.dispatchEvent("playerJoined");
+    });
+
+    this.socket.on("playerLeft", () => {
+      this.dispatchEvent("playerLeft");
+    });
   }
 
   getGamesList() {
-    this.socket.emit("getGames", this.gamesListReturned);
-  }
-
-  gamesListReturned(games) {
-    console.log(games);
+    this.socket.emit("getGames", (games) => {
+      this.dispatchEvent("gamesListReturned", games);
+    });
   }
 
   createGame(name, size, complete) {
@@ -92,36 +105,26 @@ export default class Client extends EventClass {
     this.socket.emit("createGame", gameInfos, function (returnValue) {
       if (con.errorList.hasOwnProperty(returnValue)) {
         console.log("Error " + returnValue + ": " + con.errorList[returnValue]);
-        con.gameNotCreated();
+        con.dispatchEvent("gameNotCreated");
       } else {
         console.log("Game " + returnValue + " created.");
-        con.gameCreated();
+        con.dispatchEvent("gameCreated");
       }
     });
   }
-
-  gameCreated() {
-    this.dispatchEvent("gameCreated");
-  }
-
-  gameNotCreated() {}
 
   joinGame(name) {
     let con = this;
     this.socket.emit("joinGame", name, function (returnValue) {
       if (con.errorList.hasOwnProperty(returnValue)) {
         console.log("Error " + returnValue + ": " + con.errorList[returnValue]);
-        con.gameNotJoined();
+        con.dispatchEvent("gameNotJoined");
       } else {
         console.log("Game " + returnValue + "joined.");
-        con.gameJoined();
+        con.dispatchEvent("gameJoined");
       }
     });
   }
-
-  gameJoined() {}
-
-  gameNotJoined() {}
 
   leaveGame() {
     let con = this;
@@ -141,37 +144,25 @@ export default class Client extends EventClass {
     });
   }
 
-  gameStarted() {
-    console.log("Game Started");
-  }
-
   roll(lockedDice = []) {
     let con = this;
     this.socket.emit("roll", lockedDice, function (returnValue) {
       if (con.errorList.hasOwnProperty(returnValue)) {
         console.log("Error " + returnValue + ": " + con.errorList[returnValue]);
-        con.rollNotAllowed();
+        con.dispatchEvent("rollNotAllowed");
       }
     });
   }
-
-  diceRolled(values) {
-    console.log(values);
-  }
-
-  rollNotAllowed() {}
 
   saveResult(selectedField) {
     let con = this;
     this.socket.emit("saveResult", selectedField, function (returnValue) {
       if (con.errorList.hasOwnProperty(returnValue)) {
         console.log("Error " + returnValue + ": " + con.errorList[returnValue]);
-        con.resultNotSaved();
+        con.dispatchEvent("resultNotSaved");
       }
     });
   }
-
-  resultNotSaved() {}
 
   restartGame() {
     let con = this;
@@ -180,18 +171,5 @@ export default class Client extends EventClass {
         console.log("Error " + returnValue + ": " + con.errorList[returnValue]);
       }
     });
-  }
-
-  updatePlayers(data) {
-    console.log(data.players);
-    console.log(data.playerNow);
-  }
-
-  playerJoined(player) {
-    console.log("Player " + player + " joined the game.");
-  }
-
-  playerLeft(player) {
-    console.log("Player " + player + " left the game.");
   }
 }
