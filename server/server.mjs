@@ -13,7 +13,11 @@ import crypto from "crypto";
 let app = express();
 const port = process.env.PORT || 3000;
 const password = process.env.PASSWORD || "ILoveIMD2020";
-let pwHash = crypto.createHash("md5").update(password).digest("hex");
+const salt = "DingoBingoBongoCat";
+let pwHash = crypto
+  .createHash("md5")
+  .update(password + salt)
+  .digest("hex");
 
 let server = app.listen(port);
 console.log("Server listening on port " + port + " ...");

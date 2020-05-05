@@ -58,7 +58,8 @@ export default class Client {
       console.log("Error 001: " + con.errorList["001"]);
     });
 
-    let pwHash = calcMD5(password);
+    const salt = "DingoBingoBongoCat";
+    let pwHash = calcMD5(password + salt);
     this.socket = io.connect(url, {
       query: "name=" + username + "&pw=" + pwHash,
     });
