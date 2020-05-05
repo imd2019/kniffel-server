@@ -238,7 +238,7 @@ Nachfolgend sind noch einmal alle Eventhandler von `Client` aufgeführt:
 
 - Es wurde gewürfelt
 
-  Die Werte der Würfel werden Parameter an den EventListener übergeben. `values` ist ein Array aus Würfelwerten.
+  Die Werte der Würfel werden als Parameter an den EventListener übergeben. `values` ist ein Array aus Würfelwerten.
 
   ```javascript
   client.addEventListener("diceRolled", (values) => {
@@ -281,7 +281,7 @@ Nachfolgend sind noch einmal alle Eventhandler von `Client` aufgeführt:
         - chance: null/value
         - total: 0/value
 
-    - player {}
+    - player {...}
 
     ...
 
