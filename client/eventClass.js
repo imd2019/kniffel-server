@@ -1,6 +1,6 @@
-export default class Events {
+export default class EventClass {
   constructor() {
-    this.evenListeners = [];
+    this.eventListeners = [];
   }
 
   addEventListener(type, eventHandler) {
@@ -11,10 +11,9 @@ export default class Events {
   }
 
   dispatchEvent(event) {
-    console.log(event);
     for (let index in this.eventListeners) {
-      if (event.type == this.eventListeners[index].type)
-        this.eventListeners[index].eventHandler(event);
+      if (event === this.eventListeners[index].type)
+        this.eventListeners[index].eventHandler();
     }
   }
 }

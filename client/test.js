@@ -12,3 +12,7 @@ client.roll([1, 4]);
 client.roll();
 client.roll();
 client.saveResult(client.fields.ONES);
+
+client.addEventListener("gameCreated", function () {
+  console.log("Game created!");
+});

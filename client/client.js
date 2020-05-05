@@ -3,8 +3,11 @@ Connection to server.
 (c)2020 Florian Beck, Leander Schmidt and Garrit Schaap.
 */
 
-export default class Client {
+import EventClass from "./eventClass.js";
+
+export default class Client extends EventClass {
   constructor() {
+    super();
     this.socket;
 
     this.fields = {
@@ -68,18 +71,18 @@ export default class Client {
       console.log("Error 002: " + con.errorList["002"]);
     });
 
-    this.socket.on("gameStarted", this.onGameStarted);
-    this.socket.on("diceRolled", this.onDiceRolled);
-    this.socket.on("updatePlayers", this.onUpdatePlayers);
-    this.socket.on("playerJoined", this.onPlayerJoined);
-    this.socket.on("playerLeft", this.onPlayerLeft);
+    this.socket.on("gameStarted", this.gameStarted);
+    this.socket.on("diceRolled", this.diceRolled);
+    this.socket.on("updatePlayers", this.updatePlayers);
+    this.socket.on("playerJoined", this.playerJoined);
+    this.socket.on("playerLeft", this.playerLeft);
   }
 
   getGamesList() {
-    this.socket.emit("getGames", this.onGamesListReturned);
+    this.socket.emit("getGames", this.gamesListReturned);
   }
 
-  onGamesListReturned(games) {
+  gamesListReturned(games) {
     console.log(games);
   }
 
@@ -89,34 +92,36 @@ export default class Client {
     this.socket.emit("createGame", gameInfos, function (returnValue) {
       if (con.errorList.hasOwnProperty(returnValue)) {
         console.log("Error " + returnValue + ": " + con.errorList[returnValue]);
-        con.onGameNotCreated();
+        con.gameNotCreated();
       } else {
         console.log("Game " + returnValue + " created.");
-        con.onGameCreated();
+        con.gameCreated();
       }
     });
   }
 
-  onGameCreated() {}
+  gameCreated() {
+    this.dispatchEvent("gameCreated");
+  }
 
-  onGameNotCreated() {}
+  gameNotCreated() {}
 
   joinGame(name) {
     let con = this;
     this.socket.emit("joinGame", name, function (returnValue) {
       if (con.errorList.hasOwnProperty(returnValue)) {
         console.log("Error " + returnValue + ": " + con.errorList[returnValue]);
-        con.onGameNotJoined();
+        con.gameNotJoined();
       } else {
         console.log("Game " + returnValue + "joined.");
-        con.onGameJoined();
+        con.gameJoined();
       }
     });
   }
 
-  onGameJoined() {}
+  gameJoined() {}
 
-  onGameNotJoined() {}
+  gameNotJoined() {}
 
   leaveGame() {
     let con = this;
@@ -136,7 +141,7 @@ export default class Client {
     });
   }
 
-  onGameStarted() {
+  gameStarted() {
     console.log("Game Started");
   }
 
@@ -145,28 +150,28 @@ export default class Client {
     this.socket.emit("roll", lockedDice, function (returnValue) {
       if (con.errorList.hasOwnProperty(returnValue)) {
         console.log("Error " + returnValue + ": " + con.errorList[returnValue]);
-        con.onRollNotAllowed();
+        con.rollNotAllowed();
       }
     });
   }
 
-  onDiceRolled(values) {
+  diceRolled(values) {
     console.log(values);
   }
 
-  onRollNotAllowed() {}
+  rollNotAllowed() {}
 
   saveResult(selectedField) {
     let con = this;
     this.socket.emit("saveResult", selectedField, function (returnValue) {
       if (con.errorList.hasOwnProperty(returnValue)) {
         console.log("Error " + returnValue + ": " + con.errorList[returnValue]);
-        con.onResultNotSaved();
+        con.resultNotSaved();
       }
     });
   }
 
-  onResultNotSaved() {}
+  resultNotSaved() {}
 
   restartGame() {
     let con = this;
@@ -177,16 +182,16 @@ export default class Client {
     });
   }
 
-  onUpdatePlayers(data) {
+  updatePlayers(data) {
     console.log(data.players);
     console.log(data.playerNow);
   }
 
-  onPlayerJoined(player) {
+  playerJoined(player) {
     console.log("Player " + player + " joined the game.");
   }
 
-  onPlayerLeft(player) {
+  playerLeft(player) {
     console.log("Player " + player + " left the game.");
   }
 }
