@@ -46,7 +46,9 @@ function newConnection(socket) {
     socket.disconnect();
   }
 
-  socket.on("getGames", getGames);
+  socket.on("getGames", (callback) => {
+    callback(getGames());
+  });
 
   socket.on("createGame", (gameInfos, callback) => {
     callback(createGame(gameInfos, socket));
