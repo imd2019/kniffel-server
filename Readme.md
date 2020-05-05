@@ -204,15 +204,6 @@ Nachfolgend sind noch einmal alle Eventhandler von `Client` aufgeführt:
 
 // Eventhandler einfügen!
 
-connection.updatePlayers(_players_, _playerNow_)
-
-    _players_: Array mit den Spielern {name: name, score: Object mit den Scores}
-    _playerNow_: Index des aktuellen Zug Spielers
-
-connection.diceRolled(_values_)
-
-    _values_: Array mit den gewürfelten Werten in der Rheinfolge, wie sie gewürfelt wurden
-
 ## Exception Handling
 
 Nachfolgend ist eine Liste aller möglichen Fehlermeldungen auf Client-Seite dargestellt:
