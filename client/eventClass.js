@@ -2,14 +2,13 @@ export default class Events {
   constructor() {
     this.evenListeners = [];
   }
-}
 
-addEventListener(type, eventHandler) {
-  let listener = {};
-  listener.type = type;
-  listener.eventHandler = eventHandler;
-  this.eventListeners.push(listener);
-}
+  addEventListener(type, eventHandler) {
+    let listener = {};
+    listener.type = type;
+    listener.eventHandler = eventHandler;
+    this.eventListeners.push(listener);
+  }
 
   dispatchEvent(event) {
     console.log(event);
@@ -18,3 +17,4 @@ addEventListener(type, eventHandler) {
         this.eventListeners[index].eventHandler(event);
     }
   }
+}
