@@ -23,6 +23,7 @@ export default class Client {
       CHANCE: "chance",
     };
     Object.freeze(this.fields);
+
     this.errorList = {
       "001": "Could not connect to the server.",
       "002": "Could not connect to the server. The provided password is wrong.",
@@ -62,24 +63,25 @@ export default class Client {
     };
 
     this.dispatchEvent = function (event) {
+      console.log(event);
       for (let index in this.eventListeners) {
-        if (event.type === this.eventListeners[index].type)
+        if (event.type == this.eventListeners[index].type)
           this.eventListeners[index].eventHandler(event);
       }
     };
 
-    this.addEventListener("gamesListReturned", this.onGamesListReturned);
-    this.addEventListener("gameCreated", this.onGameCreated);
-    this.addEventListener("gameNotCreated", this.onGameNotCreated);
-    this.addEventListener("gameJoined", this.onGameJoined);
-    this.addEventListener("gameNotJoined", this.onGameNotJoined);
-    this.addEventListener("gameStarted", this.onGameStarted);
-    this.addEventListener("diceRolled", this.onDiceRolled);
-    this.addEventListener("rollNotAllowed", this.onRollNotAllowed);
-    this.addEventListener("resultNotSaved", this.onResultNotSaved);
-    this.addEventListener("updatePlayers", this.onUpdatePlayers);
-    this.addEventListener("playerJoined", this.onPlayerJoined);
-    this.addEventListener("playerLeft", this.onPlayerLeft);
+    // this.addEventListener("gamesListReturned", this.onGamesListReturned);
+    // this.addEventListener("gameCreated", this.onGameCreated);
+    // this.addEventListener("gameNotCreated", this.onGameNotCreated);
+    // this.addEventListener("gameJoined", this.onGameJoined);
+    // this.addEventListener("gameNotJoined", this.onGameNotJoined);
+    // // this.addEventListener("gameIsStarted", this.onGameStarted);
+    // this.addEventListener("diceAreRolled", this.onDiceRolled);
+    // this.addEventListener("rollNotAllowed", this.onRollNotAllowed);
+    // this.addEventListener("resultNotSaved", this.onResultNotSaved);
+    // this.addEventListener("updateAllPlayers", this.onUpdatePlayers);
+    // this.addEventListener("playerHasJoined", this.onPlayerJoined);
+    // this.addEventListener("playerHasLeft", this.onPlayerLeft);
   }
 
   connect(username, password, url = "localhost:3000/") {
@@ -98,15 +100,15 @@ export default class Client {
       console.log("Error 002: " + con.errorList["002"]);
     });
 
-    this.socket.on("playerJoined", this.dispatchEvent("playerJoined"));
     this.socket.on("gameStarted", this.dispatchEvent("gameStarted"));
-    this.socket.on("diceRolled", this.dispatchEvent("diceRolled"));
-    this.socket.on("updatePlayers", this.dispatchEvent("updatePlayers"));
-    this.socket.on("playerLeft", this.dispatchEvent("playerLeft"));
+    this.socket.on("diceRolled", this.dispatchEvent("diceAreRolled"));
+    this.socket.on("updatePlayers", this.dispatchEvent("updateAllPlayers"));
+    this.socket.on("playerJoined", this.dispatchEvent("playerHasJoined"));
+    this.socket.on("playerLeft", this.dispatchEvent("playerHasLeft"));
   }
 
   getGamesList() {
-    this.socket.emit("getGames", this.gamesListReturned);
+    this.socket.emit("getGames", this.onGamesListReturned);
   }
 
   onGamesListReturned(games) {
