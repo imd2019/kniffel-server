@@ -202,7 +202,59 @@ Nachfolgend sind noch einmal alle Methoden von `Client` aufgeführt:
 
 Nachfolgend sind noch einmal alle Eventhandler von `Client` aufgeführt:
 
-// Eventhandler einfügen!
+- `GAMES_LIST_RETURNED`
+
+  Wird aufgerufen, wenn der Server auf die Anfrage `getGamesList()` eine Liste der aktuell vorhandenen Spiele zurücksendet.
+
+- `GAME_CREATED`
+
+  Wird aufgerufen, wenn das Spiel erfolgreich erstellt wurde.
+
+- `GAME_NOT_CREATED`
+
+  Wird aufgerufen, wenn das Spiel nicht erstellt werden konnte. Zusätzlich wird eine Fehlermeldung mit Fehlercode[Fehlercode](#exceptionhandling) in der Konsole des Browsers ausgegeben.
+
+- `GAME_JOINED`
+
+  Stellt die Verbindung zum Server her. Das Passwort für den Serverbeitritt wird vom Serverbetreiber zur Verfügung gestellt. `username` entspricht dem Anzeigenamen auf dem Server.
+  Wird keine URL übergeben, wird die Default-Option `"localhost:3000/"` aufgerufen.
+
+- `GAME_NOT_JOINED`
+
+  Sendet eine Anfrage an den Server, eine Liste der vorhandenen Spiele zu senden.
+
+- `GAME_STARTED`
+
+  Sendet eine Anfrage an den Server, ein neues Spiel zu erstellen.
+  Der Parameter `complete` kann auf `true` (vollständiges Spiel, oberer und unterer Block werden gespielt) oder `false` (einfaches Spiel, nur der erste Block wird gespielt) gesetzt werden.
+
+- `ROLL_NOT_ALLOWED`
+
+  Stellt die Verbindung zum Server her. Das Passwort für den Serverbeitritt wird vom Serverbetreiber zur Verfügung gestellt. `username` entspricht dem Anzeigenamen auf dem Server.
+  Wird keine URL übergeben, wird die Default-Option `"localhost:3000/"` aufgerufen.
+
+- `DICE_ROLLED`
+
+  Sendet eine Anfrage an den Server, eine Liste der vorhandenen Spiele zu senden.
+
+- `RESULT_NOT_SAVED`
+
+  Sendet eine Anfrage an den Server, ein neues Spiel zu erstellen.
+  Der Parameter `complete` kann auf `true` (vollständiges Spiel, oberer und unterer Block werden gespielt) oder `false` (einfaches Spiel, nur der erste Block wird gespielt) gesetzt werden.
+
+- `UPDATE_PLAYERS`
+
+  Stellt die Verbindung zum Server her. Das Passwort für den Serverbeitritt wird vom Serverbetreiber zur Verfügung gestellt. `username` entspricht dem Anzeigenamen auf dem Server.
+  Wird keine URL übergeben, wird die Default-Option `"localhost:3000/"` aufgerufen.
+
+- `PLAYER_JOINED`
+
+  Sendet eine Anfrage an den Server, eine Liste der vorhandenen Spiele zu senden.
+
+- `PLAYER_LEFT`
+
+  Sendet eine Anfrage an den Server, ein neues Spiel zu erstellen.
+  Der Parameter `complete` kann auf `true` (vollständiges Spiel, oberer und unterer Block werden gespielt) oder `false` (einfaches Spiel, nur der erste Block wird gespielt) gesetzt werden.
 
 ## Exception Handling
 
