@@ -212,7 +212,7 @@ Nachfolgend sind noch einmal alle Eventhandler von `Client` aufgeführt:
 
 - `GAME_NOT_CREATED`
 
-  Wird aufgerufen, wenn das Spiel nicht erstellt werden konnte. Zusätzlich wird eine Fehlermeldung mit Fehlercode[Fehlercode](#exception-handling) in der Konsole des Browsers ausgegeben.
+  Wird aufgerufen, wenn das Spiel nicht erstellt werden konnte. Zusätzlich wird eine Fehlermeldung mit [Fehlercode](#exception-handling) in der Konsole des Browsers ausgegeben.
 
 - `GAME_JOINED`
 
