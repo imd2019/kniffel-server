@@ -2,7 +2,7 @@
 
 Studiengang Interactive Media Design, Sommersemester 2020.
 
-Leander Schmidt, Florian Beck, Garrit Schaap.
+Leander Schmidt, Florian Beck, Garrit Schaap (Betreuung).
 
 ## Spielablauf
 
@@ -50,8 +50,7 @@ Außerdem muss die Einbindung in den `head`-Bereich der HTML-Datei erfolgen:
 ```html
 <head>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
-  <script src="./libraries/md5.js"></script>
-  <script type="module" src="./test.js"></script>
+  <!-- ... -->
 </head>
 ```
 
@@ -74,13 +73,23 @@ Hierzu kann man eine Liste der vorhandenen Spiele abrufen:
 client.getGamesList();
 ```
 
+Den Rückgabewert des Servers kann man über den zugehörigen Eventhandler abrufen:
+
+```javascript
+client.addEventListener(client.eventNames.GAMES_LIST_RETURNED, (e) => {
+    myFunction(e.detail);
+})
+```
+
+wobei mit `e.detail` im Funktionsaufruf an das Event angeheftete Parameter übergeben werden können (siehe hierzu auch in der [Eventhandler-Übersicht](#eventhandler-übersicht)).
+
 Um einem Spiel beizutreten, ruft man
 
 ```javascript
 client.joinGame(name);
 ```
 
-auf, wobei man den Namen des Spiels als Parameter übergibt.
+auf, wobei man den Namen des Spiels als Parameter übergibt. Der analog zu oben eingesetzte Eventhandler für den Rückgabewert ist `GAME_JOINED`. Tritt ein Fehler auf, wird das Event `GAME_NOT_JOINED` aufgerufen. Zudem wird bei den anderen im Raum befindlichen Clients das Event `PLAYER_JOINED` aufgerufen.
 
 Ein neues Spiel erstellt man wie folgt:
 
@@ -90,6 +99,7 @@ client.createGame("IMD-Club", 5, true);
 
 wobei man den Namen des Spiels und die maximale Spielerzahl übergibt.
 Der dritte Parameter legt fest, ob ein einfaches (`false`) oder vollständiges (`true`) Kniffel-Spiel erstellt werden soll.
+Auch hier wird im Anschluss analog zu oben ein Event `GAME_CREATED` bzw. `GAME_NOT_CREATED` aufgerufen.
 
 ### Spielablauf
 
@@ -101,7 +111,7 @@ Ein Spiel kann gestartet werden, sobald ihm Spieler beigetreten sind. Hierzu wir
 client.startGame();
 ```
 
-Es wird dabei stets das Spiel gestartet, dem der Spieler beigetreten ist, der die Methode aufruft.
+Es wird dabei stets das Spiel gestartet, dem der Spieler beigetreten ist, der die Methode aufruft. Der Spielstart triggert `GAME_STARTED`.
 
 #### Spielzüge
 
@@ -115,6 +125,8 @@ client.saveResult(client.fields.THREES);
 ```
 
 Dabei werden die gesperrten Würfel `roll()` in Form ihrer Indizes in einem Array übergeben. Das gewählte Feld wird beim Speichern in Form eines Werts aus dem Enumerable `client.fields` übergeben. Für eine Übersicht aller möglichen Werte siehe unten in der [Methodenübersicht](#methodenübersicht).
+Der Aufruf der Methode triggert das Event `DICE_ROLLED` oder `ROLL_NOT_ALLOWED`.
+Nach jedem Spielzug wird zudem bei allen Clients das Event `UPDATE_PLAYERS` aufgerufen, um die aktualisierten Daten zu den Spielern zu übergeben.
 
 #### Spielende oder Verlassen eines Spiels
 
@@ -131,6 +143,7 @@ client.leaveGame();
 ```
 
 Dabei wird das zugehörige Spielerobjekt gelöscht und der nächste Spieler kommt automatisch an die Reihe. Selbiges gilt, wenn die Verbindung zum Server durch einen Reload oder fehlende Internetverbindung unterbrochen wird.
+Dies triggert das Event `PLAYER_LEFT`
 
 Verlassen alle Spieler ein Spiel, wird dieses gelöscht.
 
@@ -205,6 +218,21 @@ Nachfolgend sind noch einmal alle Eventhandler von `Client` aufgeführt:
 - `GAMES_LIST_RETURNED`
 
   Wird aufgerufen, wenn der Server auf die Anfrage `getGamesList()` eine Liste der aktuell vorhandenen Spiele zurücksendet.
+  Eine Liste der vorhandenen Spiele in folgendem Format wird als Parameter übergeben:
+
+  ```javascript
+  [
+    {
+      name: "Spielname",
+      size: 4,
+      playerCount: 1,
+      complete: false,
+    }
+    {
+      ...
+    }
+  ]
+  ```
 
 - `GAME_CREATED`
 
@@ -216,45 +244,77 @@ Nachfolgend sind noch einmal alle Eventhandler von `Client` aufgeführt:
 
 - `GAME_JOINED`
 
-  Stellt die Verbindung zum Server her. Das Passwort für den Serverbeitritt wird vom Serverbetreiber zur Verfügung gestellt. `username` entspricht dem Anzeigenamen auf dem Server.
-  Wird keine URL übergeben, wird die Default-Option `"localhost:3000/"` aufgerufen.
+  Wird aufgerufen, wenn der Client erfolgreich einem Spiel beigetreten ist.
 
 - `GAME_NOT_JOINED`
 
-  Sendet eine Anfrage an den Server, eine Liste der vorhandenen Spiele zu senden.
+  Wird aufgerufen, wenn der Client dem gewünschten Spiel nicht beitreten konnte. Zusätzlich wird eine Fehlermeldung mit [Fehlercode](#exception-handling) in der Konsole des Browsers ausgegeben.
 
 - `GAME_STARTED`
 
-  Sendet eine Anfrage an den Server, ein neues Spiel zu erstellen.
-  Der Parameter `complete` kann auf `true` (vollständiges Spiel, oberer und unterer Block werden gespielt) oder `false` (einfaches Spiel, nur der erste Block wird gespielt) gesetzt werden.
+  Wird aufgerufen, wenn das Spiel gestartet wurde.
 
 - `ROLL_NOT_ALLOWED`
 
-  Stellt die Verbindung zum Server her. Das Passwort für den Serverbeitritt wird vom Serverbetreiber zur Verfügung gestellt. `username` entspricht dem Anzeigenamen auf dem Server.
-  Wird keine URL übergeben, wird die Default-Option `"localhost:3000/"` aufgerufen.
+  Wird aufgerufen, wenn der Client unerlaubt versucht zu würfeln. Zusätzlich wird eine Fehlermeldung mit [Fehlercode](#exception-handling) in der Konsole des Browsers ausgegeben.
 
 - `DICE_ROLLED`
 
-  Sendet eine Anfrage an den Server, eine Liste der vorhandenen Spiele zu senden.
+  Wird aufgerufen, nachdem gewürfelt wurde.
+  Die Würfelergebnisse werden als Array übergeben, beispielsweise `[1, 3, 5, 4, 5]`.
 
 - `RESULT_NOT_SAVED`
 
-  Sendet eine Anfrage an den Server, ein neues Spiel zu erstellen.
-  Der Parameter `complete` kann auf `true` (vollständiges Spiel, oberer und unterer Block werden gespielt) oder `false` (einfaches Spiel, nur der erste Block wird gespielt) gesetzt werden.
+  Wird aufgerufen, wenn das Ergebnis nicht gespeichert werden konnte, beispielsweise weil das gewählte Feld nicht leer ist. Zusätzlich wird eine Fehlermeldung mit [Fehlercode](#exception-handling) in der Konsole des Browsers ausgegeben.
 
 - `UPDATE_PLAYERS`
 
-  Stellt die Verbindung zum Server her. Das Passwort für den Serverbeitritt wird vom Serverbetreiber zur Verfügung gestellt. `username` entspricht dem Anzeigenamen auf dem Server.
-  Wird keine URL übergeben, wird die Default-Option `"localhost:3000/"` aufgerufen.
+  Wird nach jedem Spielzug aufgerufen, um die Daten aller Spieler zu aktualisieren.
+  Eine Liste aller Spielerobjekte wird in folgender form übergeben:
+
+  ```javascript
+  {
+    players: [
+      {
+        scores: {
+          ones: null,
+          twos: null,
+          threes: null,
+          fours: null,
+          fives: null,
+          sixes: null,
+          bonus: 0,
+          threeOfAKind: null,
+          fourOfAKind: null,
+          fullHouse: null,
+          smallStraight: null,
+          largeStraight: null,
+          kniffel: null,
+          chance: null,
+          total: 0,
+        };
+        name: "Player 1"
+      }
+      {
+        ...
+      }
+      ...
+    ]
+    playerNow: 1
+  }
+  ```
+
+wobei bei den eingetragenen Würfelergebnissen `null` für ein leeres Feld (also noch kein Wert eingetragen) steht.
 
 - `PLAYER_JOINED`
 
-  Sendet eine Anfrage an den Server, eine Liste der vorhandenen Spiele zu senden.
+  Wird aufgerufen, wenn ein Spieler das Spiel betritt.
+  Der Name des Spielers wird als Parameter (String) übergeben.
 
 - `PLAYER_LEFT`
 
-  Sendet eine Anfrage an den Server, ein neues Spiel zu erstellen.
-  Der Parameter `complete` kann auf `true` (vollständiges Spiel, oberer und unterer Block werden gespielt) oder `false` (einfaches Spiel, nur der erste Block wird gespielt) gesetzt werden.
+  Wird aufgerufen, wenn ein Spieler das Spiel verlässt.
+  Der Name des Spielers wird als Parameter (String) übergeben.
 
 ## Exception Handling
 
