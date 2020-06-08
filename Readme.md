@@ -26,9 +26,9 @@ Verlassen alle Spieler ein Spiel, wird es gelöscht.
 
 Die Client-Bibliothek besteht aus der Klasse `Client` und einer eingebundenen Verschlüsselungsmethode. Sie liegt in folgender Ordnerstruktur vor:
 
-- Client Library
+- client-library
   - client.js
-  - libraries
+  - lib
     - md5.js
 
 Diese Ordnerstruktur muss im Ordnerpfad der Javascript-Anwendung abgelegt werden.

@@ -1,4 +1,4 @@
-import Client from "./client.js";
+import Client from "./client-library/client.js";
 
 let client = new Client();
 
@@ -12,3 +12,11 @@ client.roll([1, 4]);
 client.roll();
 client.roll();
 client.saveResult(client.fields.ONES);
+
+client.addEventListener(client.eventNames.GAMES_LIST_RETURNED, function (e) {
+    myFunction(e.detail);
+})
+
+function myFunction(games) {
+    console.log(games);
+}
