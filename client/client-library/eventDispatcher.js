@@ -10,6 +10,10 @@ export default class EventDispatcher {
     this.listeners[type].push(callback);
   }
 
+  on (...args) {
+    this.addEventListener(args);
+  }
+
   removeEventListener (type, callback) {
     if (!(type in this.listeners)) {
       return;
